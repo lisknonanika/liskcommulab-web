@@ -35,5 +35,10 @@
   "枚数を入力してください。": "Number of votes is required.",
   "10以上の数値を入力してください。": "Enter a number greater than or equal to 10.",
   "報酬は約": "Reward: about",
-  "です。": ""
+  "です。": "",
+  "報酬について": "About",
+  "報酬割合": "Share",
+  "※週1回、1LSK貯まるごとに払出されます。": "*It is paid out once a week, every time 1 LSK is accumulated.",
+  "※送信手数料は払出される報酬から支払われます。": "*The transaction fee will be deducted from the reward.",
+  "※報酬割合の計算には自己投票は含まれません。": "*Self-voting is not included in the calculation of the reward percentage."
 }
