@@ -15,6 +15,9 @@ class AboutUs extends React.Component {
               <div>{this.props.translation('日本で活動しているコミュニティです。')}</div>
               <div>{this.props.translation('日本人向けにLiskに関する質問回答など様々な支援を行っています。')}</div>
               <div>{this.props.translation('Liskや当コミュニティに関して不明な点がありましたらお気軽にご質問をどうぞ。')}</div>
+              <div style={{marginTop: "20px"}}>{this.props.translation('詳しくはこちら')}</div>
+              <div>- <a href="https://note.com/liskcommulab/n/n1ba460ab394e" target="_new">Lisk CommuLab設立と新デリゲート立ち上げに伴う投票変更のご案内</a></div>
+              <div style={{marginTop: "5px"}}>- <a href="https://note.com/liskcommulab/n/ncf7163771c4d" target="_new">Establishment of "Lisk CommuLab" and Guide to Delegate Migration</a></div>
             </div>
           </div>
   
