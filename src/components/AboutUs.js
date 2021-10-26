@@ -58,24 +58,24 @@ class AboutUs extends React.Component {
               
               <div className="row"><div className="job" style={{marginBottom: "1px"}}>- {this.props.translation('管理者')} -</div></div>
               <div className="row">
-                <div className="name">ebifu222</div>
-                <div className="text"><a href="https://twitter.com/ebifu222" target="_new"><FontAwesomeIcon icon={faTwitter}/> Twitter</a></div>
-              </div>
-              <div className="row" style={{borderBottom: "1px dotted #404041"}}>
-                <ul>
-                  <li>{this.props.translation('commulabのDiscordアカウントの管理')}</li>
-                  <li>{this.props.translation('Liskに関する質問回答などの日本人サポート')}</li>
-                </ul>
-              </div>
-              
-              <div className="row"><div className="job" style={{marginBottom: "1px"}}>- {this.props.translation('管理者')} -</div></div>
-              <div className="row">
                 <div className="name">uzamaru</div>
                 <div className="text"><a href="https://twitter.com/uzamaru_crypto" target="_new"><FontAwesomeIcon icon={faTwitter}/> Twitter</a></div>
               </div>
               <div className="row" style={{borderBottom: "1px dotted #404041"}}>
                 <ul>
                   <li>{this.props.translation('commulabのTwitterアカウントの管理')}</li>
+                  <li>{this.props.translation('Liskに関する質問回答などの日本人サポート')}</li>
+                </ul>
+              </div>
+              
+              <div className="row"><div className="job" style={{marginBottom: "1px"}}>- {this.props.translation('管理者')} -</div></div>
+              <div className="row">
+                <div className="name">ebifu222</div>
+                <div className="text"><a href="https://twitter.com/ebifu222" target="_new"><FontAwesomeIcon icon={faTwitter}/> Twitter</a></div>
+              </div>
+              <div className="row" style={{borderBottom: "1px dotted #404041"}}>
+                <ul>
+                  <li>{this.props.translation('commulabのDiscordアカウントの管理')}</li>
                   <li>{this.props.translation('Liskに関する質問回答などの日本人サポート')}</li>
                 </ul>
               </div>
