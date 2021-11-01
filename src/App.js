@@ -8,6 +8,7 @@ import flag_jp from './contents/image/flag_jp.png';
 import flag_us from './contents/image/flag_us.png';
 import AboutUs from './components/AboutUs';
 import Reward from './components/Reward';
+import Event from './components/Event';
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -37,8 +38,11 @@ function App() {
       <div className="App-menu">
         <div className={page === 0? "active menu": "menu"} onClick={() => setPage(0)}>About Us</div>
         <div className={page === 1? "active menu": "menu"} onClick={() => setPage(1)}>Vote Reward</div>
+        <div className={page === 2? "active menu": "menu"} onClick={() => setPage(2)}>Event</div>
       </div>
-      {page === 0? <AboutUs translation={t}/>: <Reward translation={t}/>}
+      {page === 0? <AboutUs translation={t}/>: ""}
+      {page === 1? <Reward translation={t}/>: ""}
+      {page === 2? <Event translation={t}/>: ""}
     </div>
   );
 }
