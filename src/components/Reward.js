@@ -134,7 +134,7 @@ class Reward extends React.Component {
           <div className="content-area">
             <div className="title">{this.props.translation('報酬の確認')}</div>
             <div className="content">
-              <div className="form-area">
+              <div className="form-area" style={{borderBottom: "1px dotted #404041"}}>
                 <div>
                   <input type="text" className="textbox" value={this.state.address} placeholder={this.props.translation('Liskアドレスを入力してください')} onChange={(e) => this.setText(e)} />
                 </div>
@@ -142,12 +142,7 @@ class Reward extends React.Component {
                   <button className="button" onClick={async () => {await this.checkhReward()}}>{this.props.translation('報酬を確認する')}</button>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="content-area">
-            <div className="title">{this.props.translation('結果')}</div>
-            <div className="content">
               <div style={{borderBottom: "1px dotted #404041"}}>
                 <div className="reward-title">{this.props.translation('報酬')}</div>
                 <div className="reward-result">{this.state.reward} LSK</div>
@@ -164,6 +159,7 @@ class Reward extends React.Component {
                   }
                 </div>
               </div>
+
             </div>
           </div>
 
