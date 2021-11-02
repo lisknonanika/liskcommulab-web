@@ -36,6 +36,19 @@ class Event extends React.Component {
                 </div>
               </div>
 
+              <div style={{borderBottom: "1px dotted #404041"}}>
+                <div className="event-title">Ask Max Anything</div>
+                <div className="event-detail">
+                  <div>{this.props.translation('日時')}： 2021/11/11 AM1:00〜 (JST)</div>
+                  <div>{this.props.translation('詳細')}：&nbsp;
+                    <a href="https://twitter.com/maxkordek/status/1455487974527881225" target="_new">twitter</a>
+                    &nbsp;/&nbsp;
+                    <a href="https://www.youtube.com/watch?v=P13z_u5ahoc" target="_new">youtube</a>
+                  </div>
+                  <div>{this.props.translation('タグ')}： AMA, {this.props.translation('オンライン')}</div>
+                </div>
+              </div>
+
               <div>
                 <div className="event-title">HackOnLisk2</div>
                 <div className="event-detail">
