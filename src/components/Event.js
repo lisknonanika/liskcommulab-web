@@ -52,7 +52,7 @@ class Event extends React.Component {
                 </div>
               </div>
 
-              <div>
+              <div style={{borderBottom: "1px dotted #404041"}}>
                 <div className="event-title">Ask Max Anything</div>
                 <div className="event-detail">
                   <div>{this.props.translation('日時')}： 2021/11/11 1:00〜 (JST)</div>
