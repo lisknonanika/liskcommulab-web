@@ -45,8 +45,11 @@
   "ハッカソン": "hackathon",
   "日時": "schedule",
   "詳細": "more info",
+  "アナウンス": "announce",
   "タグ": "tag",
   "対面": "in-person",
   "オンライン": "online",
+  "恒常": "always",
+  "定期": "constant",
   "予定されていません": "not scheduled yet."
 }
