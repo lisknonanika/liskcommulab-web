@@ -55,7 +55,7 @@ class Event extends React.Component {
               <div style={{borderBottom: "1px dotted #404041"}}>
                 <div className="event-title">Ask Max Anything</div>
                 <div className="event-detail">
-                  <div>{this.props.translation('日時')}： 2021/11/11 1:00〜 (JST)</div>
+                  <div>{this.props.translation('日時')}： {this.props.translation('次回未定')}</div>
                   <div>{this.props.translation('アナウンス')}：&nbsp;
                     <a href="https://twitter.com/maxkordek/status/1455487974527881225" target="_new">twitter</a>
                   </div>
