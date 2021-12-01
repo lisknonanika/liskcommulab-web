@@ -69,7 +69,7 @@ class Event extends React.Component {
               <div>
                 <div className="event-title">Lisk Army Contest</div>
                 <div className="event-detail">
-                  <div>{this.props.translation('日時')}： 2021/12/1 15:00〜 (JST)</div>
+                  <div>{this.props.translation('日時')}： 2021/12/2 2:00〜 (JST)</div>
                   <div>{this.props.translation('アナウンス')}：&nbsp;
                     <a href="https://twitter.com/LiskHQ/status/1456283209663123463" target="_new">twitter</a>
                   </div>
