@@ -25,7 +25,7 @@ class Event extends React.Component {
               <div style={{borderBottom: "1px dotted #404041"}}>
                 <div className="event-title">AmpliFire</div>
                 <div className="event-detail">
-                  <div>{this.props.translation('日時')}： 2021/12/3 2:00～7:00 (JST)</div>
+                  <div>{this.props.translation('日時')}： -</div>
                   <div>{this.props.translation('アナウンス')}：&nbsp;
                     <a href="https://lisk.com/blog/announcement/amplifire-event-lisk" target="_new">lisk.com</a>
                   </div>
@@ -39,14 +39,14 @@ class Event extends React.Component {
               </div>
 
               <div style={{borderBottom: "1px dotted #404041"}}>
-                <div className="event-title">HackOnLisk2</div>
+                <div className="event-title">HackOnLisk3</div>
                 <div className="event-detail">
-                  <div>{this.props.translation('日時')}： 2021/9/11 1:15～2021/12/3 2:00 (JST)</div>
+                  <div>{this.props.translation('日時')}： 2022</div>
                   <div>{this.props.translation('アナウンス')}：&nbsp;
-                    <a href="https://lisk.com/blog/announcement/announcing-hackonlisk2" target="_new">lisk.com</a>
+                    -
                   </div>
                   <div>{this.props.translation('詳細')}：&nbsp;
-                    <a href="https://hackonlisk2.devpost.com/" target="_new">devpost</a>
+                    -
                   </div>
                   <div>{this.props.translation('タグ')}：{this.props.translation('ハッカソン')}, {this.props.translation('オンライン')}</div>
                 </div>
