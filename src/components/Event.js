@@ -23,60 +23,89 @@ class Event extends React.Component {
             <div className="content">
 
               <div style={{borderBottom: "1px dotted #404041"}}>
-                <div className="event-title">AmpliFire</div>
+                <div className="event-title">Lisk Army Contest</div>
                 <div className="event-detail">
-                  <div>{this.props.translation('日時')}： -</div>
-                  <div>{this.props.translation('アナウンス')}：&nbsp;
-                    <a href="https://lisk.com/blog/announcement/amplifire-event-lisk" target="_new">lisk.com</a>
+                  <div>
+                    {this.props.translation('日時')}： 2021/12/2 2:00〜 (JST)
                   </div>
-                  <div>{this.props.translation('詳細')}：&nbsp;
-                    <a href="https://www.youtube.com/watch?v=31XPRrrBBX4" target="_new">youtube</a>
-                    &nbsp;/&nbsp;
-                    <a href="https://www.eventbrite.com/e/amplifire-tickets-201633179267" target="_new">eventbrite</a>
+                  <div>
+                    {this.props.translation('アナウンス')}：&nbsp;
+                    <a href="https://twitter.com/LiskHQ/status/1456283209663123463" target="_new">twitter</a>
                   </div>
-                  <div>{this.props.translation('タグ')}： {this.props.translation('対面')}, {this.props.translation('オンライン')}</div>
-                </div>
-              </div>
-
-              <div style={{borderBottom: "1px dotted #404041"}}>
-                <div className="event-title">HackOnLisk3</div>
-                <div className="event-detail">
-                  <div>{this.props.translation('日時')}： 2022</div>
-                  <div>{this.props.translation('アナウンス')}：&nbsp;
-                    -
+                  <div>
+                    {this.props.translation('詳細')}：&nbsp;
+                    <a href="https://sweepwidget.com/view/38437-g7p8qesk" target="_new">sweepwidget</a>
                   </div>
-                  <div>{this.props.translation('詳細')}：&nbsp;
-                    -
+                  <div>
+                    {this.props.translation('タグ')}：&nbsp;
+                    {this.props.translation('恒常')},&nbsp;
+                    {this.props.translation('オンライン')}
                   </div>
-                  <div>{this.props.translation('タグ')}：{this.props.translation('ハッカソン')}, {this.props.translation('オンライン')}</div>
                 </div>
               </div>
 
               <div style={{borderBottom: "1px dotted #404041"}}>
                 <div className="event-title">Ask Max Anything</div>
                 <div className="event-detail">
-                  <div>{this.props.translation('日時')}： 2022/12/21 1:00～</div>
-                  <div>{this.props.translation('アナウンス')}：&nbsp;
+                  <div>
+                    {this.props.translation('日時')}： {this.props.translation('次回未定')}</div>
+                  <div>
+                    {this.props.translation('アナウンス')}：&nbsp;
                     <a href="https://twitter.com/LiskHQ/status/1471488474763042824" target="_new">twitter</a>
                   </div>
-                  <div>{this.props.translation('詳細')}：&nbsp;
+                  <div>
+                    {this.props.translation('詳細')}：&nbsp;
                     <a href="https://www.youtube.com/watch?v=2ITa5ojV5Do" target="_new">youtube</a>
                   </div>
-                  <div>{this.props.translation('タグ')}： {this.props.translation('定期')}, AMA, {this.props.translation('オンライン')}</div>
+                  <div>
+                    {this.props.translation('タグ')}：&nbsp;
+                    {this.props.translation('定期')},&nbsp;
+                    {this.props.translation('AMA')},&nbsp;
+                    {this.props.translation('オンライン')}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{borderBottom: "1px dotted #404041"}}>
+                <div className="event-title">HackOnLisk3</div>
+                <div className="event-detail">
+                  <div>
+                    {this.props.translation('日時')}： 2022
+                  </div>
+                  <div>
+                    {this.props.translation('アナウンス')}：
+                  </div>
+                  <div>
+                    {this.props.translation('詳細')}：
+                  </div>
+                  <div>
+                    {this.props.translation('タグ')}：&nbsp;
+                    {this.props.translation('ハッカソン')},&nbsp;
+                    {this.props.translation('オンライン')}
+                  </div>
                 </div>
               </div>
 
               <div>
-                <div className="event-title">Lisk Army Contest</div>
+                <div className="event-title">AmpliFire</div>
                 <div className="event-detail">
-                  <div>{this.props.translation('日時')}： 2021/12/2 2:00〜 (JST)</div>
-                  <div>{this.props.translation('アナウンス')}：&nbsp;
-                    <a href="https://twitter.com/LiskHQ/status/1456283209663123463" target="_new">twitter</a>
+                  <div>
+                    {this.props.translation('日時')}： {this.props.translation('終了')}
                   </div>
-                  <div>{this.props.translation('詳細')}：&nbsp;
-                    <a href="https://sweepwidget.com/view/38437-g7p8qesk" target="_new">sweepwidget</a>
+                  <div>
+                    {this.props.translation('アナウンス')}：&nbsp;
+                    <a href="https://lisk.com/blog/announcement/amplifire-event-lisk" target="_new">lisk.com</a>
                   </div>
-                  <div>{this.props.translation('タグ')}： {this.props.translation('恒常')}, {this.props.translation('オンライン')}</div>
+                  <div>
+                    {this.props.translation('詳細')}：&nbsp;
+                    <a href="https://www.youtube.com/playlist?list=PLixm1arf_lEyxuTR5WlvCm_hMYi6h8Y8N" target="_new">youtube</a>
+                  </div>
+                  <div>
+                    {this.props.translation('タグ')}：&nbsp;
+                    {this.props.translation('重要')},&nbsp;
+                    {this.props.translation('対面')},&nbsp;
+                    {this.props.translation('オンライン')}
+                  </div>
                 </div>
               </div>
 

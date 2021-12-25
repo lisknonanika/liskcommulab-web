@@ -42,6 +42,7 @@
   "※送信手数料は払出される報酬から支払われます。": "*The transaction fee will be deducted from the reward.",
   "※報酬割合の計算には自己投票は含まれません。": "*Self-voting is not included in the calculation of the reward percentage.",
   "詳しくはこちら": "For more information:",
+  "AMA": "AMA",
   "ハッカソン": "hackathon",
   "日時": "schedule",
   "詳細": "more info",
@@ -52,5 +53,7 @@
   "恒常": "always",
   "定期": "constant",
   "予定されていません": "not scheduled yet.",
-  "次回未定": "next time undecided"
+  "次回未定": "next time undecided",
+  "終了": "end",
+  "重要": "important"
 }
