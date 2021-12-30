@@ -83,6 +83,17 @@ function Omikuji() {
     } else if (v <= 16) {
       kekka = KUJI_KEKKA[6];
     }
+    const text = encodeURIComponent(
+`おみくじを引いたら...
+${kekka} でした！
+
+${KUJI_SHURUI[0]}：${KUJI_NAIYO[n1]}
+${KUJI_SHURUI[1]}：${KUJI_NAIYO[n2]}
+${KUJI_SHURUI[2]}：${KUJI_NAIYO[n3]}
+${KUJI_SHURUI[3]}：${KUJI_NAIYO[n4]}
+
+https://liskcommulab.jp/omikuji
+#Lisk #OmikujiLisk`);
     await Swal.fire({
       html: `
       <div class="Omikuji-kekka">${kekka}</div>
@@ -90,13 +101,19 @@ function Omikuji() {
       <div class="Omikuji-kekka-detail">${KUJI_SHURUI[1]}：${KUJI_NAIYO[n2]}</div>
       <div class="Omikuji-kekka-detail">${KUJI_SHURUI[2]}：${KUJI_NAIYO[n3]}</div>
       <div class="Omikuji-kekka-detail">${KUJI_SHURUI[3]}：${KUJI_NAIYO[n4]}</div>
-      <div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 5px;">アドレス</div>
+      <div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 10px;">アドレス</div>
       <div class="Omikuji-kekka-detail">
         <a href="https://omikuji-api.liskcommulab.jp/account?address=${address}" target="_new">${address}</a>
       </div>
-      <div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 5px;">トランザクションID</div>
+      <div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 10px;">トランザクションID</div>
       <div class="Omikuji-kekka-detail">
         <a href="https://omikuji-api.liskcommulab.jp/transaction?id=${id}" target="_new">${id}</a>
+      </div>
+      <div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 10px;">結果をつぶやいてみる？</div>
+      <div class="Omikuji-kekka-detail">
+        <a href="https://twitter.com/intent/tweet?text=${text}" target="_new">
+          Twitterでつぶやく
+        </a>
       </div>
       `,
       confirmButtonColor: '#3085d6'
@@ -148,7 +165,8 @@ function Omikuji() {
           <div className="content" style={{backgroundColor: "rgba(233, 223, 37, 0.05)", borderColor: "rgba(233, 37, 37, 0.7)"}}>
             <div style={{fontWeight: "bold"}}>内容</div>
             <div>・おみくじを引いた人の中から10名に30LSKあげちゃいます！</div>
-            <div>・当選発表は1/4(予定)</div>
+            <div>・期間：1/1〜1/3(予定)</div>
+            <div>・当選発表：1/4(予定)</div>
             <div style={{fontWeight: "bold"}}>応募方法</div>
             <div>・おみくじを引くだけ！</div>
             <div style={{fontWeight: "bold"}}>注意</div>
