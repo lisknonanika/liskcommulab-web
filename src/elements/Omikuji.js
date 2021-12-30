@@ -140,7 +140,7 @@ function Omikuji() {
   return (
     <div className="App">
       <div className="App-contents Omikuji-contents">
-
+        <h3>テスト中です！</h3>
         <div className="content-area">
           <div className="title" style={{backgroundColor: "rgba(233, 37, 37, 0.5)", borderColor: "rgba(233, 37, 37, 0.7)", fontWeight: "bold"}}>
             おみくじを引いてLSKをもらおう！
