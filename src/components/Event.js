@@ -14,7 +14,26 @@ class Event extends React.Component {
           <div className="content-area">
             <div className="title">commulab</div>
             <div className="content">
-              {this.props.translation('予定されていません')}
+              {/* {this.props.translation('予定されていません')} */}
+
+              <div>
+                <div className="event-title">おみくじを引いてLSKをもらおう</div>
+                <div className="event-detail">
+                  <div>
+                    {this.props.translation('日時')}： 2022/01/01〜2022/01/03
+                  </div>
+                  <div>
+                    {this.props.translation('アナウンス')}：
+                  </div>
+                  <div>
+                    {this.props.translation('詳細')}：
+                    <a href="https://liskcommulab.jp/omikuji" target="_new">おみくじイベント会場</a>
+                  </div>
+                  <div>
+                    {this.props.translation('オンライン')}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

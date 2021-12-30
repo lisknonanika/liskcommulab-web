@@ -1,0 +1,53 @@
+body {
+  background:linear-gradient(to bottom right, #eeb8b8, #f7dcb4, 50%, #fffcf2);
+}
+
+.Omikuji-contents {
+  height: initial;
+  background: none;
+  border-top: 1px solid #f7dcb4;
+  overflow-y: initial;
+}
+
+.form-area div {
+  margin-bottom: 5px;
+}
+
+.Omikuji-kekka {
+  font-size: 3rem;
+  color: rgb(173, 50, 50);
+  font-weight: bold;
+}
+
+.Omikuji-kekka-detail {
+  font-size: 0.8rem;
+}
+
+.Omikuji-kekka-detail a {
+  color: rgb(46, 168, 184);
+}
+
+.Omikuji-kekka-list {
+  border-bottom: 1px solid #cccccc;
+  padding: 5px;
+}
+
+.Omikuji-memo1 {
+  font-size: 0.8rem;
+  color: rgb(173, 50, 50);
+}
+
+.Omikuji-memo2 {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.Omikuji-memo3 {
+  font-size: 0.8rem;
+}
+
+.Omikuji-createAccount {
+  font-weight: bold;
+  color: rgb(50, 50, 173);
+  text-decoration: underline;
+}
