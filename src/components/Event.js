@@ -30,6 +30,7 @@ class Event extends React.Component {
                     <a href="https://liskcommulab.jp/omikuji" target="_new">おみくじイベント会場</a>
                   </div>
                   <div>
+                    {this.props.translation('タグ')}：&nbsp;
                     {this.props.translation('オンライン')}
                   </div>
                 </div>
