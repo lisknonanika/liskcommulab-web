@@ -46,7 +46,7 @@ class Event extends React.Component {
                 <div className="event-title">Lisk Army Contest</div>
                 <div className="event-detail">
                   <div>
-                    {this.props.translation('日時')}： 2021/12/2 2:00〜 (JST)
+                    {this.props.translation('日時')}： 2021/12/2 2:00〜
                   </div>
                   <div>
                     {this.props.translation('アナウンス')}：&nbsp;
