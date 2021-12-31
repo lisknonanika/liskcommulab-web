@@ -46,10 +46,11 @@ body {
   font-size: 0.8rem;
 }
 
-.Omikuji-createAccount {
+.Omikuji-link {
   font-weight: bold;
   color: rgb(50, 50, 173);
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .Omikuji-copy {
