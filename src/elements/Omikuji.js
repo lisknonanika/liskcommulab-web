@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { Mnemonic } from '@liskhq/lisk-passphrase';
 import { getLisk32AddressFromPassphrase } from '@liskhq/lisk-cryptography';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import '../App.css';
 import '../Omikuji.css';
 
@@ -12,11 +13,18 @@ function Omikuji() {
   const [name, setName] = useState("");
   const [kekkaAddress, setKekkaAddress] = useState("");
   const [kekkaName, setKekkaName] = useState("");
+  const [password, setPassword] = useState("");
   const [kekka, setKekka] = useState([]);
+  const [tosensha, setTosensha] = useState([]);
 
   useEffect(async() => {
-    await reload();
+    await getKekka();
+    await getTosensha();
   }, []);
+
+  const MySwal = withReactContent(Swal);
+
+  const TEST_MODE = true;
 
   const KUJI_KEKKA = [
     '大吉',
@@ -43,22 +51,45 @@ function Omikuji() {
       '恋愛運'
   ];
 
+  const escapeValue = (v) => {
+    return v
+    .replace(/&/g, '&lt;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, "&#x27;");
+  }
+
+  const copy = async(a, p) => {
+    const ret = await navigator.clipboard.writeText(
+`
+[アドレス]
+${a}
+[パスフレーズ]
+${p}
+`
+    );
+    await MySwal.fire({ text: 'コピーしました', icon: 'success', confirmButtonColor: '#3085d6' });
+  }
+
   const createAccount = async() => {
     const passphrase = Mnemonic.generateMnemonic();
     const address = getLisk32AddressFromPassphrase(passphrase);
-    await Swal.fire({
-      html: `
+    await MySwal.fire({
+      html: 
       <div>
-        <div class="Omikuji-memo1">アカウントを作成しました！</div>
-        <div class="Omikuji-memo1">この情報は忘れないようにして下さい。また、パスフレーズは絶対に他人に教えないでください。</div>
-        <div class="Omikuji-memo2" style="margin-top: 5px;">アドレス</div>
-        <div class="Omikuji-memo3">${address}</div>
-        <div class="Omikuji-memo2">パスフレーズ</div>
-        <div class="Omikuji-memo3">${passphrase}</div>
-      </div>
-      `,
+        <div className="Omikuji-memo1">アカウントを作成しました！</div>
+        <div className="Omikuji-memo1">パスフレーズは絶対に他人に教えないでください。</div>
+        <div className="Omikuji-memo1">LSKを引き出す際はパスフレーズが必要です。必ずメモするなど忘れないようにしてください。(忘れた場合は復旧することができません)</div>
+        <div className="Omikuji-memo2" style={{marginTop: "5px"}}>アドレス</div>
+        <div className="Omikuji-memo3">{address}</div>
+        <div className="Omikuji-memo2">パスフレーズ</div>
+        <div className="Omikuji-memo3">{passphrase}</div>
+        <div className="Omikuji-copy" onClick={async() => {await copy(address, passphrase)}}>アドレスとパスフレーズをコピーする</div>
+      </div>,
       icon: 'success',
-      confirmButtonColor: '#3085d6'});
+      confirmButtonColor: '#3085d6'
+    });
   }
 
   const getOmikuji = async(id, address) => {
@@ -94,28 +125,30 @@ ${KUJI_SHURUI[3]}：${KUJI_NAIYO[n4]}
 
 https://liskcommulab.jp/omikuji
 #Lisk #OmikujiLisk`);
-    await Swal.fire({
-      html: `
-      <div class="Omikuji-kekka">${kekka}</div>
-      <div class="Omikuji-kekka-detail">${KUJI_SHURUI[0]}：${KUJI_NAIYO[n1]}</div>
-      <div class="Omikuji-kekka-detail">${KUJI_SHURUI[1]}：${KUJI_NAIYO[n2]}</div>
-      <div class="Omikuji-kekka-detail">${KUJI_SHURUI[2]}：${KUJI_NAIYO[n3]}</div>
-      <div class="Omikuji-kekka-detail">${KUJI_SHURUI[3]}：${KUJI_NAIYO[n4]}</div>
-      <div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 10px;">アドレス</div>
-      <div class="Omikuji-kekka-detail">
-        <a href="https://omikuji-api.liskcommulab.jp/account?address=${address}" target="_new">${address}</a>
-      </div>
-      <div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 10px;">トランザクションID</div>
-      <div class="Omikuji-kekka-detail">
-        <a href="https://omikuji-api.liskcommulab.jp/transaction?id=${id}" target="_new">${id}</a>
-      </div>
-      <div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 10px;">結果をつぶやいてみる？</div>
-      <div class="Omikuji-kekka-detail">
-        <a href="https://twitter.com/intent/tweet?text=${text}" target="_new">
-          Twitterでつぶやく
-        </a>
-      </div>
-      `,
+
+    await MySwal.fire({
+      html:
+      <div>
+        <div class="Omikuji-kekka">{kekka}</div>
+        <div class="Omikuji-kekka-detail">{KUJI_SHURUI[0]}：{KUJI_NAIYO[n1]}</div>
+        <div class="Omikuji-kekka-detail">{KUJI_SHURUI[1]}：{KUJI_NAIYO[n2]}</div>
+        <div class="Omikuji-kekka-detail">{KUJI_SHURUI[2]}：{KUJI_NAIYO[n3]}</div>
+        <div class="Omikuji-kekka-detail">{KUJI_SHURUI[3]}：{KUJI_NAIYO[n4]}</div>
+        <div class="Omikuji-kekka-detail" style={{fontWeight: "bold", marginTop: "10px"}}>アドレス</div>
+        <div class="Omikuji-kekka-detail">
+          <a href={`https://omikuji-api.liskcommulab.jp/account?address=${address}`} target="_new">{address}</a>
+        </div>
+        <div class="Omikuji-kekka-detail" style={{fontWeight: "bold", marginTop: "10px"}}>トランザクションID</div>
+        <div class="Omikuji-kekka-detail">
+          <a href={`https://omikuji-api.liskcommulab.jp/transaction?id=${id}`} target="_new">{id}</a>
+        </div>
+        <div class="Omikuji-kekka-detail" style={{fontWeight: "bold", marginTop: "10px"}}>結果をつぶやいてみる？</div>
+        <div class="Omikuji-kekka-detail">
+          <a href={`https://twitter.com/intent/tweet?text=${text}`} target="_new">
+            Twitterでつぶやく
+          </a>
+        </div>
+      </div>,
       confirmButtonColor: '#3085d6'
     });
   }
@@ -131,7 +164,7 @@ https://liskcommulab.jp/omikuji
     await getOmikuji(json.id, address);
   }
 
-  const reload = async() => {
+  const getKekka = async() => {
     const res = await fetch(`https://omikuji-api.liskcommulab.jp/kekka?address=${kekkaAddress}&name=${kekkaName}`, {mode: 'cors'});
     const json = await res.json();
 
@@ -154,10 +187,85 @@ https://liskcommulab.jp/omikuji
     setKekka(kekkaElems);
   }
 
+  const getTosensha = async() => {
+    const res = await fetch(`https://omikuji-api.liskcommulab.jp/tosensha`, {mode: 'cors'});
+    const json = await res.json();
+
+    if (!json.result) {
+      await Swal.fire({text: json.msg, icon: 'error', confirmButtonColor: '#3085d6'});
+      return;
+    }
+    const data = json.data.slice(0, 10);
+    const tosenshaElem = [];
+    tosenshaElem.push(
+      <div className="Omikuji-kekka-list" style={{fontWeight:"bold", "borderBottom":"none"}} key={"msg"}>
+        当選者は以下の方です。おめでとうございます！
+      </div>
+    );  
+    for (let i in data) {
+      tosenshaElem.push(
+        <div className="Omikuji-kekka-list" key={i}>
+          {data[i]} さん
+        </div>
+      );  
+    }
+    setTosensha(tosenshaElem);
+  }
+
+  const chusen = async() => {
+
+    const res = await fetch(`https://omikuji-api.liskcommulab.jp/atari?password=${password}`, {mode: 'cors'});
+    const json = await res.json();
+
+    if (!json.result) {
+      await Swal.fire({text: json.msg, icon: 'error', confirmButtonColor: '#3085d6'});
+      return;
+    }
+
+    await Swal.fire({
+      html: `
+      ${json.id?
+        `<div>` +
+        `<div class="Omikuji-kekka" style="font-size: 2rem;">抽選結果</div>` +
+        `<div style="font-size: 1rem; font-weight: bold; margin-bottom: 5px;">当選者は以下の方です。おめでとうございます！</div>` +
+        `${json.data.length > 0? `<div style="font-size: 0.9rem;">${escapeValue(json.data[0])} さん</div>`: ""}` +
+        `${json.data.length > 1? `<div style="font-size: 0.9rem;">${escapeValue(json.data[1])} さん</div>`: ""}` +
+        `${json.data.length > 2? `<div style="font-size: 0.9rem;">${escapeValue(json.data[2])} さん</div>`: ""}` +
+        `${json.data.length > 3? `<div style="font-size: 0.9rem;">${escapeValue(json.data[3])} さん</div>`: ""}` +
+        `${json.data.length > 4? `<div style="font-size: 0.9rem;">${escapeValue(json.data[4])} さん</div>`: ""}` +
+        `${json.data.length > 5? `<div style="font-size: 0.9rem;">${escapeValue(json.data[5])} さん</div>`: ""}` +
+        `${json.data.length > 6? `<div style="font-size: 0.9rem;">${escapeValue(json.data[6])} さん</div>`: ""}` +
+        `${json.data.length > 7? `<div style="font-size: 0.9rem;">${escapeValue(json.data[7])} さん</div>`: ""}` +
+        `${json.data.length > 8? `<div style="font-size: 0.9rem;">${escapeValue(json.data[8])} さん</div>`: ""}` +
+        `${json.data.length > 9? `<div style="font-size: 0.9rem;">${escapeValue(json.data[9])} さん</div>`: ""}` +
+        `<div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 10px;">トランザクションID</div>` +
+        `<div class="Omikuji-kekka-detail"><a href="https://omikuji-api.liskcommulab.jp/transaction?id=${json.id}" target="_new">${json.id}</a></div>` +
+        `</div>`
+        :
+        `<div>` +
+        `<div class="Omikuji-kekka" style="font-size: 2rem;">抽選結果(テスト)</div>` +
+        `<div style="font-size: 1rem; font-weight: bold; margin-bottom: 5px;">これはテストです。実際の当選結果とは関係ありません。</div>` +
+        `${json.data.length > 0? `<div style="font-size: 0.9rem;">${escapeValue(json.data[0])} さん</div>`: ""}` +
+        `${json.data.length > 1? `<div style="font-size: 0.9rem;">${escapeValue(json.data[1])} さん</div>`: ""}` +
+        `${json.data.length > 2? `<div style="font-size: 0.9rem;">${escapeValue(json.data[2])} さん</div>`: ""}` +
+        `${json.data.length > 3? `<div style="font-size: 0.9rem;">${escapeValue(json.data[3])} さん</div>`: ""}` +
+        `${json.data.length > 4? `<div style="font-size: 0.9rem;">${escapeValue(json.data[4])} さん</div>`: ""}` +
+        `${json.data.length > 5? `<div style="font-size: 0.9rem;">${escapeValue(json.data[5])} さん</div>`: ""}` +
+        `${json.data.length > 6? `<div style="font-size: 0.9rem;">${escapeValue(json.data[6])} さん</div>`: ""}` +
+        `${json.data.length > 7? `<div style="font-size: 0.9rem;">${escapeValue(json.data[7])} さん</div>`: ""}` +
+        `${json.data.length > 8? `<div style="font-size: 0.9rem;">${escapeValue(json.data[8])} さん</div>`: ""}` +
+        `${json.data.length > 9? `<div style="font-size: 0.9rem;">${escapeValue(json.data[9])} さん</div>`: ""}` +
+        `</div>`
+      }
+      `,
+      confirmButtonColor: '#3085d6'
+    });
+  }
+
   return (
     <div className="App">
       <div className="App-contents Omikuji-contents">
-        <h3>テスト中です！</h3>
+        {TEST_MODE?<h3>テスト中です！</h3>: ""}
         <div className="content-area">
           <div className="title" style={{backgroundColor: "rgba(233, 37, 37, 0.5)", borderColor: "rgba(233, 37, 37, 0.7)", fontWeight: "bold"}}>
             おみくじを引いてLSKをもらおう！
@@ -171,7 +279,7 @@ https://liskcommulab.jp/omikuji
             <div>・おみくじを引くだけ！</div>
             <div style={{fontWeight: "bold"}}>注意</div>
             <div>・何回引いても当選確率に影響はありません</div>
-            <div>・捨てアカウント(Twitter)での応募はおやめください</div>
+            <div>・捨てアカウント(Twitter)での応募はおご遠慮ください</div>
           </div>
         </div>
 
@@ -182,14 +290,14 @@ https://liskcommulab.jp/omikuji
           <div className="content" style={{backgroundColor: "rgba(233, 223, 37, 0.05)", borderColor: "rgba(233, 37, 37, 0.7)"}}>
             <div style={{fontWeight: "bold"}}>おみくじを引くには...</div>
             <div>・Liskアドレスを入力します(アドレスを持っていない人や新しいアドレスがほしい人は <span className="Omikuji-createAccount" onClick={async() => await createAccount()}>こちら</span>)</div>
-            <div>・Twitter名(例：@liskcommulab)を入力します(@はなくても大丈夫)</div>
-            <div>・おみくじを引くボタンを押します</div>
+            <div>・Twitter名(例:@liskcommulab)を入力します(@はなくても大丈夫)</div>
+            <div>・「おみくじを引く」ボタンを押します</div>
             <div className="form-area">
               <div>
                 <input type="text" className="textbox" value={address} placeholder="Liskアドレス" onChange={(e) => setAddress(e.target.value)} />
               </div>
               <div>
-                <input type="text" className="textbox" value={name} placeholder="Twitter名(例：@commulab)" onChange={(e) => setName(e.target.value)} />
+                <input type="text" className="textbox" value={name} placeholder="Twitter名(例:@liskcommulab)" onChange={(e) => setName(e.target.value)} />
               </div>
               <div>
                 <button className="button" onClick={async() => {await hiku()}}>おみくじを引く</button>
@@ -203,20 +311,47 @@ https://liskcommulab.jp/omikuji
             おみくじ結果(最新10件)
           </div>
           <div className="content" style={{backgroundColor: "rgba(233, 223, 37, 0.05)", borderColor: "rgba(233, 37, 37, 0.7)"}}>
-            <div>
+            <div style={{marginBottom: "10px"}}>
               {kekka}
             </div>
+            <div>・Liskアドレス、Twitter名を入力して「最新化/検索」ボタンを押すと入力内容に一致するもののみで絞り込みができます</div>
             <div className="form-area">
               <div>
-                <input type="text" className="textbox" value={kekkaAddress} placeholder="フィルタ用：Liskアドレス" onChange={(e) => setKekkaAddress(e.target.value)} />
+                <input type="text" className="textbox" value={kekkaAddress} placeholder="Liskアドレス" onChange={(e) => setKekkaAddress(e.target.value)} />
               </div>
               <div>
-                <input type="text" className="textbox" value={kekkaName} placeholder="フィルタ用：Twitter名(例：@commulab)" onChange={(e) => setKekkaName(e.target.value)} />
+                <input type="text" className="textbox" value={kekkaName} placeholder="Twitter名(例:@liskcommulab)" onChange={(e) => setKekkaName(e.target.value)} />
               </div>
               <div>
-                <button className="button" onClick={async() => {await reload()}}>最新を見る/検索</button>
+                <button className="button" onClick={async() => {await getKekka()}}>最新化/検索</button>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="content-area">
+          <div className="title" style={{backgroundColor: "rgba(233, 37, 37, 0.5)", borderColor: "rgba(233, 37, 37, 0.7)", fontWeight: "bold"}}>
+            当選結果
+          </div>
+          <div className="content" style={{backgroundColor: "rgba(233, 223, 37, 0.05)", borderColor: "rgba(233, 37, 37, 0.7)"}}>
+            <div style={{marginBottom: "10px"}}>
+              {tosensha}
+            </div>
+            {tosensha.length == 0 || TEST_MODE?
+              <div>
+                <div>・おみくじを引いた中からランダムで10名抽出します</div>
+                <div>・抽選用パスワードを入力せずに「抽選する」ボタンを押すことで当選気分を味わえるかも？</div>
+                <div>・抽選用パスワード正しい場合のみ抽選結果が確定します</div>
+                <div className="form-area">
+                  <div>
+                    <input type="text" className="textbox" value={password} placeholder="抽選用パスワード" onChange={(e) => setPassword(e.target.value)} />
+                  </div>
+                  <div>
+                    <button className="button" onClick={async() => {await chusen()}}>抽選する</button>
+                  </div>
+                </div>
+              </div>
+            : ""}
           </div>
         </div>
         

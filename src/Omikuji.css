@@ -51,3 +51,10 @@ body {
   color: rgb(50, 50, 173);
   text-decoration: underline;
 }
+
+.Omikuji-copy {
+  color: rgb(50, 50, 173);
+  text-decoration: underline;
+  margin-top: 10px;
+  font-size: 0.8rem;
+}
