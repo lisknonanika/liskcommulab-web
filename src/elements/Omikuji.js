@@ -136,15 +136,15 @@ https://liskcommulab.jp/omikuji
         <div class="Omikuji-kekka-detail">{KUJI_SHURUI[3]}：{KUJI_NAIYO[n4]}</div>
         <div class="Omikuji-kekka-detail" style={{fontWeight: "bold", marginTop: "10px"}}>アドレス</div>
         <div class="Omikuji-kekka-detail">
-          <a href={`https://omikuji-api.liskcommulab.jp/account?address=${address}`} target="_new">{address}</a>
+          <a href={`https://omikuji-api.liskcommulab.jp/account?address=${address}`} target="_new" rel="noopener">{address}</a>
         </div>
         <div class="Omikuji-kekka-detail" style={{fontWeight: "bold", marginTop: "10px"}}>トランザクションID</div>
         <div class="Omikuji-kekka-detail">
-          <a href={`https://omikuji-api.liskcommulab.jp/transaction?id=${id}`} target="_new">{id}</a>
+          <a href={`https://omikuji-api.liskcommulab.jp/transaction?id=${id}`} target="_new" rel="noopener">{id}</a>
         </div>
         <div class="Omikuji-kekka-detail" style={{fontWeight: "bold", marginTop: "10px"}}>結果をつぶやいてみる？</div>
         <div class="Omikuji-kekka-detail">
-          <a href={`https://twitter.com/intent/tweet?text=${text}`} target="_new">
+          <a href={`https://twitter.com/intent/tweet?text=${text}`} target="_new" rel="noopener">
             Twitterでつぶやく
           </a>
         </div>
@@ -239,7 +239,7 @@ https://liskcommulab.jp/omikuji
         `${json.data.length > 8? `<div style="font-size: 0.9rem;">${escapeValue(json.data[8])} さん</div>`: ""}` +
         `${json.data.length > 9? `<div style="font-size: 0.9rem;">${escapeValue(json.data[9])} さん</div>`: ""}` +
         `<div class="Omikuji-kekka-detail" style="font-weight: bold; margin-top: 10px;">トランザクションID</div>` +
-        `<div class="Omikuji-kekka-detail"><a href="https://omikuji-api.liskcommulab.jp/transaction?id=${json.id}" target="_new">${json.id}</a></div>` +
+        `<div class="Omikuji-kekka-detail"><a href="https://omikuji-api.liskcommulab.jp/transaction?id=${json.id}" target="_new" rel="noopener">${json.id}</a></div>` +
         `</div>`
         :
         `<div>` +
