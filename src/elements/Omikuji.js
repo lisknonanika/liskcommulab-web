@@ -340,8 +340,8 @@ https://liskcommulab.jp/omikuji
             {tosensha.length == 0 || TEST_MODE?
               <div>
                 <div>・おみくじを引いた中からランダムで10名抽出します</div>
-                <div>・抽選用パスワードを入力せずに「抽選する」ボタンを押すことで当選気分を味わえるかも？</div>
-                <div>・抽選用パスワード正しい場合のみ抽選結果が確定します</div>
+                <div>・正しい抽選用パスワードが入力された場合にのみ当選者が確定します</div>
+                <div>・抽選テストをする場合はパスワードを入力せずに「抽選する」ボタンを押してください</div>
                 <div className="form-area">
                   <div>
                     <input type="text" className="textbox" value={password} placeholder="抽選用パスワード" onChange={(e) => setPassword(e.target.value)} />
