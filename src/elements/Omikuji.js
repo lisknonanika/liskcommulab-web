@@ -279,7 +279,7 @@ https://liskcommulab.jp/omikuji
             <div>・おみくじを引くだけ！</div>
             <div style={{fontWeight: "bold"}}>注意</div>
             <div>・何回引いても当選確率に影響はありません</div>
-            <div>・捨てアカウント(Twitter)での応募はおご遠慮ください</div>
+            <div>・捨てアカウント(Twitter)での応募はご遠慮ください</div>
           </div>
         </div>
 
