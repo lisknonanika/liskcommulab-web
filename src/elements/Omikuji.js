@@ -24,7 +24,7 @@ function Omikuji() {
 
   const MySwal = withReactContent(Swal);
 
-  const TEST_MODE = true;
+  const TEST_MODE = false;
 
   const KUJI_KEKKA = [
     '大吉',
@@ -197,17 +197,19 @@ https://liskcommulab.jp/omikuji
     }
     const data = json.data.slice(0, 10);
     const tosenshaElem = [];
-    tosenshaElem.push(
-      <div className="Omikuji-kekka-list" style={{fontWeight:"bold", "borderBottom":"none"}} key={"msg"}>
-        当選者は以下の方です。おめでとうございます！
-      </div>
-    );  
-    for (let i in data) {
+    if (data.length > 0) {
       tosenshaElem.push(
-        <div className="Omikuji-kekka-list" key={i}>
-          {data[i]} さん
+        <div className="Omikuji-kekka-list" style={{fontWeight:"bold", "borderBottom":"none"}} key={"msg"}>
+          当選者は以下の方です。おめでとうございます！
         </div>
       );  
+      for (let i in data) {
+        tosenshaElem.push(
+          <div className="Omikuji-kekka-list" key={i}>
+            {data[i]} さん
+          </div>
+        );  
+      }
     }
     setTosensha(tosenshaElem);
   }
