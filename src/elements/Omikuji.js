@@ -275,8 +275,8 @@ https://liskcommulab.jp/omikuji
           <div className="content" style={{backgroundColor: "rgba(233, 223, 37, 0.05)", borderColor: "rgba(233, 37, 37, 0.7)"}}>
             <div style={{fontWeight: "bold"}}>内容</div>
             <div>・おみくじを引いた人の中から10名に30LSKあげちゃいます！</div>
-            <div>・期間：1/1〜1/3(予定)</div>
-            <div>・当選発表：1/4(予定)</div>
+            <div>・期間：1/1〜1/3</div>
+            <div>・当選発表：1/4</div>
             <div style={{fontWeight: "bold"}}>応募方法</div>
             <div>・おみくじを引くだけ！</div>
             <div style={{fontWeight: "bold"}}>注意</div>
