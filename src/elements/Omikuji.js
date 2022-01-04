@@ -354,7 +354,7 @@ https://liskcommulab.jp/omikuji
                 <div>・抽選テストをする場合はパスワードを入力せずに「抽選する」ボタンを押してください</div>
                 <div className="form-area">
                   <div>
-                    <input type="text" className="textbox" value={password} placeholder="抽選用パスワード" onChange={(e) => setPassword(e.target.value)} />
+                    <input type="password" className="textbox" value={password} placeholder="抽選用パスワード" onChange={(e) => setPassword(e.target.value)} />
                   </div>
                   <div>
                     <button className="button" onClick={async() => {await chusen()}}>抽選する</button>
