@@ -20,10 +20,11 @@ class Event extends React.Component {
                 <div className="event-title">おみくじを引いてLSKをもらおう</div>
                 <div className="event-detail">
                   <div>
-                    {this.props.translation('日時')}： 2022/01/01〜2022/01/03
+                    {this.props.translation('日時')}： {this.props.translation('終了')}
                   </div>
                   <div>
-                    {this.props.translation('アナウンス')}：
+                    {this.props.translation('アナウンス')}：&nbsp;
+                    <a href="https://twitter.com/liskcommulab/status/1477067219922460674" target="_new">twitter</a>
                   </div>
                   <div>
                     {this.props.translation('詳細')}：
