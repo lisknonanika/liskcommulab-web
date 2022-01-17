@@ -6,6 +6,7 @@ body {
   height: initial;
   background: none;
   border-top: 1px solid #f7dcb4;
+  height: 100vh;
   overflow-y: initial;
 }
 
