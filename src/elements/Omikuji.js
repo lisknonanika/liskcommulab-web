@@ -8,7 +8,7 @@ function Omikuji() {
       <div className="App-contents Omikuji-contents">
         <div className="content-area">
           <div className="title" style={{backgroundColor: "rgba(233, 37, 37, 0.5)", borderColor: "rgba(233, 37, 37, 0.7)", fontWeight: "bold"}}>
-            おみくじを引いてLSKをもらおう！
+            おみくじを引いてLSKをもらおう！(跡地)
           </div>
           <div className="content" style={{backgroundColor: "rgba(233, 223, 37, 0.05)", borderColor: "rgba(233, 37, 37, 0.7)"}}>
             <div style={{fontWeight: "bold"}}>内容</div>
@@ -21,11 +21,8 @@ function Omikuji() {
             <div>・何回引いても当選確率に影響はありません</div>
             <div>・捨てアカウント(Twitter)での応募はご遠慮ください</div>
             <div style={{fontWeight: "bold"}}>その他</div>
-            <div>・このおみくじは <a href="https://lisk.com/documentation/lisk-sdk/index.html" target="_blank" rel="noopener noreferrer" className="Omikuji-link">Lisk SDK</a> を使って作られています</div>
+            <div>・おみくじは <a href="https://lisk.com/documentation/lisk-sdk/index.html" target="_blank" rel="noopener noreferrer" className="Omikuji-link">Lisk SDK</a> を使って作られました</div>
             <div>
-              &nbsp;&nbsp;&nbsp;
-              <a href="https://omikuji-api.liskcommulab.jp/node" target="_blank" rel="noopener noreferrer" className="Omikuji-link">ノード情報</a>
-              &nbsp;&nbsp;
               <a href="https://github.com/lisknonanika/omikuji-lisk" target="_blank" rel="noopener noreferrer" className="Omikuji-link">ソース</a>
             </div>
           </div>
