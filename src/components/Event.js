@@ -47,15 +47,15 @@ class Event extends React.Component {
                 <div className="event-title">Lisk Army Contest</div>
                 <div className="event-detail">
                   <div>
-                    {this.props.translation('日時')}： ～2022/2/1 8:00(JST)
+                    {this.props.translation('日時')}： 2022/02
                   </div>
                   <div>
                     {this.props.translation('アナウンス')}：&nbsp;
-                    <a href="https://twitter.com/LiskHQ/status/1479067071942115334" target="_new">twitter</a>
+                    <a href="https://twitter.com/LiskHQ/status/1489493932555870210" target="_new">twitter</a>
                   </div>
                   <div>
                     {this.props.translation('詳細')}：&nbsp;
-                    <a href="https://sweepwidget.com/view/47116-9imjs12c" target="_new">sweepwidget</a>
+                    <a href="https://sweepwidget.com/view/49696-psdy92qz" target="_new">sweepwidget</a>
                   </div>
                   <div>
                     {this.props.translation('タグ')}：&nbsp;
