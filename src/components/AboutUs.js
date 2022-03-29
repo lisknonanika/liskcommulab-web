@@ -2,9 +2,38 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen, faGlobe, faProjectDiagram } from '@fortawesome/free-solid-svg-icons';
 import { faTwitter, faGithub, faDiscord } from '@fortawesome/free-brands-svg-icons';
+import { convertBeddowsToLSK } from '@liskhq/lisk-transactions';
 import '../App.css';
 
 class AboutUs extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      account: {balance:"", rank:"", voteWeight:"", totalVotesReceived:""},
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      const resH = await fetch(
+        `https://service.lisk.com/api/v2/accounts?username=commulab&isDelegate=true&limit=1&offset=0`,
+        {mode: 'cors'}
+      );
+      const jsonH = await resH.json();
+      const data = jsonH.data[0];
+      this.setState({
+        account: {
+          balance: convertBeddowsToLSK(data.token.balance),
+          rank: String(data.dpos.delegate.rank),
+          voteWeight: convertBeddowsToLSK(data.dpos.delegate.voteWeight),
+          totalVotesReceived: convertBeddowsToLSK(data.dpos.delegate.totalVotesReceived)
+        }
+      });
+    } catch (err) {
+      // 何もしない
+    }
+  }
+
   render() {
     return (
       <div>
@@ -44,11 +73,12 @@ class AboutUs extends React.Component {
                 </div>
                 <div className="text"><a href="https://twitter.com/liskcommulab" target="_new"><FontAwesomeIcon icon={faTwitter}/> Twitter</a></div>
               </div>
-              <div className="row" style={{marginTop: "3px", paddingBottom: "10px", borderBottom: "1px dotted #404041"}}>
-                <div className="text" style={{whiteSpace: "nowrap"}}>{this.props.translation('アドレス')}</div>
-                <div className="address">
-                  <a href="https://lisk.observer/account/lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw" target="_new">lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw</a>
-                </div>
+              <div className="row" style={{borderBottom: "1px dotted #404041"}}>
+                <ul>
+                  <li style={{marginTop: "3px"}}>{this.props.translation('アドレス')}<br/><a href="https://lisk.observer/account/lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw" target="_new">lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw</a></li>
+                  <li style={{marginTop: "3px"}}>{this.props.translation('ランク')}<br/>{this.state.account.rank}</li>
+                  <li style={{marginTop: "3px"}}>{this.props.translation('総投票数 / 最大投票数')}<br/>{this.state.account.totalVotesReceived} / {this.state.account.voteWeight}</li>
+                </ul>
               </div>
               <div className="row" style={{marginTop: "5px"}}><div className="text">{this.props.translation('いつも応援ありがとうございます。')}</div></div>
               <div className="row"><div className="text">{this.props.translation('commulabへの投票・寄付で私たちをサポートして下さい。')}</div></div>
