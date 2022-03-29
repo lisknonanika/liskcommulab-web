@@ -77,7 +77,7 @@ class AboutUs extends React.Component {
                 <ul>
                   <li style={{marginTop: "3px"}}>{this.props.translation('アドレス')}<br/><a href="https://lisk.observer/account/lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw" target="_new">lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw</a></li>
                   <li style={{marginTop: "3px"}}>{this.props.translation('ランク')}<br/>{this.state.account.rank}</li>
-                  <li style={{marginTop: "3px"}}>{this.props.translation('総投票数 / 最大投票数')}<br/>{this.state.account.totalVotesReceived} / {this.state.account.voteWeight}</li>
+                  <li style={{marginTop: "3px"}}>{this.props.translation('得票数 / 最大票数')}<br/>{this.state.account.totalVotesReceived} / {this.state.account.voteWeight}</li>
                 </ul>
               </div>
               <div className="row" style={{marginTop: "5px"}}><div className="text">{this.props.translation('いつも応援ありがとうございます。')}</div></div>
