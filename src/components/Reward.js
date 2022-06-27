@@ -125,7 +125,7 @@ class Reward extends React.Component {
             <div className="title" style={{backgroundColor: "#da0000", borderColor: "#da0000", fontWeight: "bold"}}>{this.props.translation('報酬について')}</div>
             <div className="content" style={{backgroundColor: "rgba(233, 223, 37, 0.05)", borderColor: "#da0000"}}>
               <div style={{fontWeight: "bold"}}>{this.props.translation('報酬割合')}：50%</div>
-              <div>{this.props.translation('※週1回、1LSK貯まるごとに払出されます。')}</div>
+              <div>{this.props.translation('※週1回、0.1LSK貯まるごとに払出されます。')}</div>
               <div>{this.props.translation('※送信手数料は払出される報酬から支払われます。')}</div>
               <div>{this.props.translation('※報酬割合の計算には自己投票は含まれません。')}</div>
             </div>
