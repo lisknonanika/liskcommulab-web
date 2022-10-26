@@ -16,7 +16,7 @@ class Event extends React.Component {
             <div className="content">
               {/* {this.props.translation('予定されていません')} */}
 
-              <div>
+              <div style={{borderBottom: "1px dotted #404041"}}>
                 <div className="event-title">1周年記念キャンペーン</div>
                 <div className="event-detail">
                   <div>
