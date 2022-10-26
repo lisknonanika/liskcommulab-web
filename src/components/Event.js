@@ -17,6 +17,27 @@ class Event extends React.Component {
               {/* {this.props.translation('予定されていません')} */}
 
               <div>
+                <div className="event-title">1周年記念キャンペーン</div>
+                <div className="event-detail">
+                  <div>
+                    {this.props.translation('日時')}： 2022/10/30～2022/11/12(JST)
+                  </div>
+                  <div>
+                    {this.props.translation('アナウンス')}：&nbsp;
+                    <a href="https://twitter.com/liskcommulab/status/1585058626623995907" target="_new">twitter</a>
+                  </div>
+                  <div>
+                    {this.props.translation('詳細')}：&nbsp;
+                    期間中にcommulabに投票されている方への報酬割合が100%(通常時50%)になります。
+                  </div>
+                  <div>
+                    {this.props.translation('タグ')}：&nbsp;
+                    {this.props.translation('オンライン')}
+                  </div>
+                </div>
+              </div>
+
+              <div>
                 <div className="event-title">おみくじを引いてLSKをもらおう</div>
                 <div className="event-detail">
                   <div>
