@@ -20,7 +20,7 @@ class Event extends React.Component {
                 <div className="event-title">1周年記念キャンペーン</div>
                 <div className="event-detail">
                   <div>
-                    {this.props.translation('日時')}： 2022/10/30～2022/11/12(JST)
+                    {this.props.translation('日時')}： {this.props.translation('終了')}
                   </div>
                   <div>
                     {this.props.translation('アナウンス')}：&nbsp;
