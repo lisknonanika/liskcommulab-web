@@ -22,6 +22,7 @@
 <script>
     document.querySelector("#menu-tool").addEventListener("click", function(event) {
         if (document.querySelector("#menu-tool-sub").style.display === "none") {
+            document.querySelector("#menu-tool-sub").style.left = `${Math.floor(document.querySelector("#menu-tool").getBoundingClientRect().right - 210)}px`;
             document.querySelector("#menu-tool-sub").style.display = "block";
             document.querySelector("#menu-tool-toggle").innerHTML = "<i class='fas fa-chevron-up'></i>";
             return;
