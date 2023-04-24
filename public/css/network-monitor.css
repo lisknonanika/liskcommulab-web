@@ -1,0 +1,54 @@
+@charset "utf-8";
+.content {
+    border: 1px solid #dddddd;
+    background-color: rgba(221, 221, 221, 0.9);
+}
+
+canvas {
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+li.status-green {
+    color: rgb(0, 155, 0);
+}
+
+li.status-red {
+    color: rgb(165, 5, 5);
+}
+
+li div {
+    color: #000;
+}
+
+.status-alert {
+    font-weight: bold;
+    color: rgb(165, 5, 5);
+}
+
+/* status-host */
+.status-host {
+    margin-top: 20px;
+}
+
+.status-host .content-main {
+    background-image: url("../image/lisk-Search.png");
+}
+
+/* status-api */
+.status-api {
+    margin-top: 30px;
+}
+
+.status-api .content-main {
+    background-image: url("../image/lisk-Stars.png");
+}
+
+/* history-host */
+.history-host {
+    margin-top: 30px;
+}
+
+/* history-api */
+.history-api {
+    margin-top: 30px;
+}

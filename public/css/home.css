@@ -1,0 +1,106 @@
+@charset "utf-8";
+.content {
+    border: 1px solid #c5cfe4;
+    background-color: rgba(197, 207, 228, 0.9);
+}
+
+/* aboutus */
+.aboutus {
+    margin-top: 20px;
+}
+
+.aboutus .content-main {
+    background-image: url("../image/avatar.svg");
+    background-size: 215px, auto, contain;
+}
+
+/* announce */
+.announce {
+    margin-top: 20px;
+}
+
+.announce .content-main {
+    background-image: url("../image/lisk-Castle.png");
+}
+
+/* member */
+.member {
+    margin-top: 30px;
+}
+
+.member .content-main {
+    background-image: url("../image/lisk-Delegates.png");
+}
+
+/* event */
+.event {
+    margin-top: 30px;
+}
+
+.event .content-main {
+    background-image: url("../image/lisk-Notebook.png");
+}
+
+/* twitter */
+.twitter {
+    margin-top: 30px;
+}
+
+.twitter .content-main {
+    background-image: url("../image/lisk-Notifications.png");
+}
+
+/* blog */
+.blog {
+    margin-top: 30px;
+}
+
+.blog .content-main {
+    background-image: url("../image/lisk-PencilGuy.png");
+}
+
+.blog .thumbnail img {
+    width: 500px;
+}
+
+.blog .title {
+    margin-bottom: 10px;
+}
+
+.blog .description br {
+    display: none;
+}
+
+.blog .writer {
+    text-align: right;
+    padding-top: 5px;
+    color: .333;
+}
+
+.blog .writer::before {
+    content: "- ";
+}
+
+/* announce */
+.announce {
+    margin-top: 30px;
+}
+
+.announce .content-main {
+    background-image: url("../image/lisk-Castle.png");
+}
+
+/* link */
+.link {
+    margin-top: 30px;
+}
+
+.link .content-main {
+    background-image: url("../image/lisk-World.png");
+}
+
+@media screen and (max-width: 540px) {
+    .blog .thumbnail img {
+        max-width: 100%;
+    }
+}

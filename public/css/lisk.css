@@ -1,0 +1,23 @@
+@charset "utf-8";
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'Lisk-Logo' !important;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-Lisk-Symbol:before {
+	content: "\e900";
+}
+
+.icon-Lisk-Symbol-Wrapped:before {
+	content: "\e901";
+}
+
+.icon-Lisk-Logo:before {
+	content: "\e902";
+}

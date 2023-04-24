@@ -1,0 +1,26 @@
+@charset "utf-8";
+@font-face {
+	font-family: 'Orbitron';
+	src: url('../fonts/Orbitron/Orbitron.ttf') format('truetype');
+	font-style: normal;
+    font-weight: bold;
+}
+
+@font-face {
+	font-family: 'Gilroy';
+	src: url('../fonts/Gilroy/Gilroy-ExtraBold.otf') format('opentype');
+	font-style: normal;
+    font-weight: bold;
+}
+
+@font-face {
+	font-family: 'Lisk-Logo';
+	src:	url('../fonts/Lisk/Lisk-Logo.eot?v11vpy');
+	src:	url('../fonts/Lisk/Lisk-Logo.eot?v11vpy#iefix') format('embedded-opentype'),
+		url('../fonts/Lisk/Lisk-Logo.ttf?v11vpy') format('truetype'),
+		url('../fonts/Lisk/Lisk-Logo.woff?v11vpy') format('woff'),
+		url('../fonts/Lisk/Lisk-Logo.svg?v11vpy#Lisk-Logo') format('svg');
+	font-weight: normal;
+	font-style: normal;
+	font-display: block;
+}

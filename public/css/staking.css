@@ -1,0 +1,83 @@
+@charset "utf-8";
+.content {
+    border: 1px solid #ffd0d1;
+    background-color: rgba(255, 208, 209, 0.9);
+}
+
+/* staking-info */
+.staking-info {
+    margin-top: 20px;
+}
+
+.staking-info .content-main {
+    background-image: url("../image/lisk-Treasure.png");
+}
+
+/* staking-reward */
+.staking-reward {
+    margin-top: 30px;
+}
+
+.staking-reward .content-main {
+    background-image: url("../image/lisk-Hodler.png");
+}
+
+#reward-search input {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 95%;
+    border: 1px solid #ccc;
+    border-radius: 10px; 
+}
+
+#reward-list {
+    height: 400px;
+}
+
+#reward-list.hasData {
+    padding: 10px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+    overflow-y: scroll;
+}
+
+#reward-list ul {
+    padding-left: 5px;
+}
+
+#reward-list ul li {
+    border-bottom: 1px dashed #ccc;
+    list-style: none;
+}
+
+#reward-list ul li div.title {
+    width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* staking-expectation */
+.staking-expectation {
+    margin-top: 30px;
+}
+
+.staking-expectation .content-main {
+    background-image: url("../image/lisk-Robot.png");
+}
+
+#calculate-exp input {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 95%;
+    border: 1px solid #ccc;
+    border-radius: 10px; 
+}
+
+#calculate-data {
+    padding: 10px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+}

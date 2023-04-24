@@ -1,0 +1,10 @@
+<svg height="200" width="200" class="accountVisual" xmlns="http://www.w3.org/2000/svg"><defs><style>.wrapper {
+  display: inline-block;
+  border-radius: 100%;
+}
+
+.accountVisual {
+  border-radius: 100%;
+  overflow: hidden;
+  display: inline-block;
+}</style><linearGradient id="frosty-BG" gradientTransform="rotate(-225)"><stop stop-color="#0083B2" offset="0%"></stop><stop stop-color="#0EC2C3" offset="100%"></stop></linearGradient><linearGradient id="frosty-FG" gradientTransform="rotate(-225)"><stop stop-color="#F5FEFF" offset="0%"></stop><stop stop-color="#94D3E9" offset="100%"></stop></linearGradient><linearGradient id="frosty-1" gradientTransform="rotate(-225)"><stop stop-color="#E8F6FF" offset="0%"></stop><stop stop-color="#00CEC8" offset="100%"></stop></linearGradient><linearGradient id="frosty-2" gradientTransform="rotate(-225)"><stop stop-color="#FFF387" offset="0%"></stop><stop stop-color="#00CEC8" offset="100%"></stop></linearGradient><linearGradient id="frosty-3" gradientTransform="rotate(-255)"><stop stop-color="#FF92A1" offset="0%"></stop><stop stop-color="#CA0053" offset="100%"></stop></linearGradient><linearGradient id="frosty-4" gradientTransform="rotate(-225)"><stop stop-color="#FFD974" offset="0%"></stop><stop stop-color="#FF7F00" offset="100%"></stop></linearGradient></defs><circle cx="100" cy="100" r="100" fill="url(#frosty-BG)"></circle><rect x="35" y="55" height="420" width="420" fill="url(#frosty-FG)" transform="rotate(93.60000000000001, 100, 100)"></rect><circle cx="68.7" cy="68.7" r="43.7" fill="url(#frosty-1)" transform="rotate(0, 100, 100)"></circle><circle cx="62.8" cy="72.8" r="37.8" fill="url(#frosty-3)" transform="rotate(7.2, 100, 100)"></circle></svg>

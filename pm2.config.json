@@ -1,8 +1,4 @@
 {
   "name": "liskcommulab-web",
-  "script": "node ./node_modules/react-scripts/scripts/start.js",
-
-  "env": {
-      "PORT": 3210
-  }
+  "script": "node ./app.js"
 }

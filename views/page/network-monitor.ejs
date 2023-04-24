@@ -1,0 +1,224 @@
+<div id="network-monitor">
+    <div class="status-host">
+        <div class="content-title">
+            <i class="fas fa-network-wired"></i>&nbsp;Host - Status
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">ホストの状態確認(タイムアウト：5秒)</div>
+        <div class="content-main left">
+            <div class="content open">
+                <div id="status-ping">読み込み中...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="history-host">
+        <div class="content-title">
+            <i class="fas fa-network-wired"></i>&nbsp;Host - History
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">ホストの履歴</div>
+        <div class="content-main">
+            <div class="content open" style="width: calc(100% - 20px);">
+                <div id="history-ping">読み込み中...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-api">
+        <div class="content-title">
+            <i class="fas fa-network-wired"></i>&nbsp;Service API - Status
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">Lisk Service APIの状態確認(タイムアウト：10秒)</div>
+        <div class="content-main right">
+            <div class="content open">
+                <div id="status-fetch">読み込み中...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="history-api">
+        <div class="content-title">
+            <i class="fas fa-network-wired"></i>&nbsp;Service API - History
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">Lisk Service APIの履歴</div>
+        <div class="content-main">
+            <div class="content open" style="width: calc(100% - 20px);">
+                <div id="history-fetch">読み込み中...</div>
+            </div>
+        </div>
+    </div>
+    
+    <link rel="stylesheet" href="../css/network-monitor.css" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/common.js" charset="utf-8"></script>
+    <script>
+        const getStatus = async() => {
+            const ret = await fetch("https://ysdev.work/lisk-network-check", { mode: 'cors' });
+            const json = await ret.json();
+    
+            document.querySelector("#status-ping").innerHTML = "<ul></ul>";
+            const pingdom = document.querySelector("#status-ping ul");
+            pingdom.innerHTML = "";
+            for (let ping of json.ping) {
+                const pingrow = `
+                <li class="${ping.alive ? 'status-green': 'status-red'}">
+                <div class="title">${ping.host}</div>
+                <div>ip: ${ping.ip}</div>
+                <div>check: ${changeTimestamp(ping.checkDate)}</div>
+                <div>response: ${ping.responseTime} ミリ秒</div>
+                <div class="status-alert">${ping.downTime === 0 ? "" : `<i class="fas fa-triangle-exclamation"></i>&nbsp;${Math.round(ping.downTime / 1000 / 60)}分くらい前からダウンしてるか激重です。`}</div>
+                </li>
+                `;
+                pingdom.innerHTML += pingrow;
+            }
+    
+            document.querySelector("#status-fetch").innerHTML = "<ul></ul>";
+            const fetchdom = document.querySelector("#status-fetch ul");
+            fetchdom.innerHTML = "";
+            for (let fetch of json.fetch) {
+                const fetchrow = `
+                <li class="${fetch.alive ? 'status-green': 'status-red'}">
+                <div class="title">${fetch.url.replace("https://", "").replace("?limit=1", "")}</div>
+                <div>status: ${fetch.status}</div>
+                <div>check: ${changeTimestamp(fetch.checkDate)}</div>
+                <div>response: ${fetch.responseTime} ミリ秒</div>
+                <div class="status-alert">${fetch.downTime === 0 ? "" : `<i class="fas fa-triangle-exclamation"></i>&nbsp;${Math.round(fetch.downTime / 1000)}分くらい前からダウンしてるか激重です。`}</div>
+                </li>
+                `;
+                fetchdom.innerHTML += fetchrow;
+            }
+        };
+    
+        const getHistory = async() => {
+            const ret = await fetch("https://ysdev.work/lisk-network-history?limit=20", { mode: 'cors' });
+            const json = await ret.json();
+    
+            const pingdom = document.querySelector("#history-ping");
+            pingdom.innerHTML = "";
+            for (let i = 0; i < json.ping.length; i++) {
+                const ping = json.ping[i];
+                const pingrow = `
+                <div class="title" style="${i > 0? 'margin-top: 20px;': ''}">${ping.host}</div>
+                <div style="position:relative;height:250px;"><canvas id="ping-chart${i}"></canvas></div>
+                `;
+                pingdom.innerHTML += pingrow;
+            }
+    
+            for (let i = 0; i < json.ping.length; i++) {
+                const ping = json.ping[i];
+                drawPingChart(ping, i);
+            }
+    
+            const fetchdom = document.querySelector("#history-fetch");
+            fetchdom.innerHTML = "";
+            for (let i = 0; i < json.fetch.length; i++) {
+                const fetch = json.fetch[i];
+                const fetchrow = `
+                <div class="title" style="${i > 0? 'margin-top: 20px;': ''}">${fetch.url.replace("https://", "").replace("?limit=1", "")}</div>
+                <div style="position:relative;height:250px;"><canvas id="fetch-chart${i}"></canvas></div>
+                `;
+                fetchdom.innerHTML += fetchrow;
+            }
+    
+            for (let i = 0; i < json.fetch.length; i++) {
+                const fetch = json.fetch[i];
+                drawFetchChart(fetch, i);
+            }
+        }
+    
+        const drawPingChart = (ping, idx) => {
+            const timestamps = ping.data.map(data => changeTimestamp(data.timestamp));
+            const responseTimes = ping.data.map(data => data.responseTime);
+            const ctx = document.querySelector(`#ping-chart${idx}`);
+    
+            Chart.defaults.color = '#000';
+            Chart.defaults.font.size = 10;
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timestamps.reverse(),
+                    datasets: [{
+                        label: 'response time',
+                        data: responseTimes.reverse(),
+                        fill: false
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            title: { display: true, text: 'ミリ秒' },
+                            suggestedMin: 0,
+                            suggestedMax: 500,
+                            ticks: {
+                                stepSize: 100
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    
+        const drawFetchChart = (fetch, idx) => {
+            const timestamps = fetch.data.map(data => changeTimestamp(data.timestamp));
+            const responseTimes = fetch.data.map(data => data.responseTime);
+            const ctx = document.querySelector(`#fetch-chart${idx}`);
+    
+            Chart.defaults.color = '#000';
+            Chart.defaults.font.size = 10;
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timestamps.reverse(),
+                    datasets: [{
+                        label: 'response time',
+                        data: responseTimes.reverse(),
+                        fill: false
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            title: { display: true, text: 'ミリ秒' },
+                            suggestedMin: 0,
+                            suggestedMax: 5000,
+                            ticks: {
+                                stepSize: 1000
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    
+        const reload = async () => {
+            const pingStatusDom = document.querySelector("#status-ping");
+            pingStatusDom.innerHTML = "Loading...";
+            const fetchStatusDom = document.querySelector("#status-fetch");
+            fetchStatusDom.innerHTML = "Loading...";
+            getStatus();
+    
+            const pingHistoryDom = document.querySelector("#history-ping");
+            pingHistoryDom.innerHTML = "Loading...";
+            const fetchHistoryDom = document.querySelector("#history-fetch");
+            fetchHistoryDom.innerHTML = "Loading...";
+            getHistory();
+        }
+    
+        const changeTimestamp = (d) => {
+            const dt = new Date(d);
+            return `${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}`;
+        }
+    
+        (() => {
+            getStatus();
+            getHistory();
+        })();
+    </script>
+</div>

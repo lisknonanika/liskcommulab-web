@@ -1,0 +1,153 @@
+<div id="staking">
+    <div class="staking-info">
+        <div class="content-title">
+            <img src="../image/commulab-Logo.png"/>&nbsp;Staking Information
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">投票報酬に関する情報</div>
+        <div class="content-main left">
+            <div class="content open">
+                <div>commulabは以下の通りに報酬の計算と支払いを行っています&nbsp;<i class="far fa-face-laugh-beam"></i></div>
+                <br />
+                <div class="title">報酬の計算と支払いについて</div>
+                <ul>
+                    <li>
+                        <div class="title">報酬割合</div>
+                        <div>50%</div>
+                    </li>
+                    <li>
+                        <div class="title">報酬計算タイミング</div>
+                        <div>毎日2回(0時, 12時)</div>
+                    </li>
+                    <li>
+                        <div class="title">支払日</div>
+                        <div>毎週日曜日</div>
+                    </li>
+                    <li>
+                        <div class="title">注意事項</div>
+                        <div><i class="fas fa-thumbtack"></i>&nbsp;報酬が0.1LSK以上溜まっている場合のみ支払われます。</div>
+                        <div><i class="fas fa-thumbtack"></i>&nbsp;送信手数料を差し引いた枚数が受取枚数になります。</div>
+                        <div><i class="fas fa-thumbtack"></i>&nbsp;1ブロックあたりの投票報酬計算は下記計算式で算出されます。</div>
+                        <div style="padding-left: 1.4rem;">投票数 / (総得票数 - 自己投票数) * (ブロック報酬 * 報酬割合)</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="staking-reward">
+        <div class="content-title">
+            <img src="../image/commulab-Logo.png"/>&nbsp;Reward Check
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">溜まっている投票報酬の確認</div>
+        <div class="content-main right">
+            <div class="content open">
+                <div id="reward-search" style="display: none;">
+                    <div>Liskアドレスの部分一致検索が出来ます。</div>
+                    <input type="text" placeholder="Liskアドレスを入力してください">
+                </div>
+                <div id="reward-list">取得中です。</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="staking-expectation">
+        <div class="content-title">
+            <img src="../image/commulab-Logo.png"/>&nbsp;Expectation Check
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">1週間の投票報酬(期待値)の確認</div>
+        <div class="content-main left">
+            <div class="content open">
+                <div id="calculate-exp">
+                    <div class="title">注意事項</div>
+                    <ul>
+                        <li><div>commulabがアクティブ(上位101位以内)であることが前提です。</div></li>
+                        <li><div>commulabの1週間のブロック報酬を580LSKとして計算します。</div></li>
+                        <li><div>「Staking Information」に記載の計算式で計算します。</div></li>
+                        <li><div>入力値の10LSK未満の値は切り上げます。</div></li>
+                    </ul>
+                    <br />
+                    <div>1週間の報酬(期待値)の確認が出来ます。</div>
+                    <input type="number" placeholder="投票枚数を入力してください">
+                </div>
+                <div id="calculate-data" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="../css/staking.css" type="text/css" />
+    <script src="https://js.lisk.com/lisk-client-5.2.1.js" charset="utf-8"></script>
+    <script src="../js/common.js" charset="utf-8"></script>
+    <script>
+        const setRewardList = async() => {
+            try {
+                const list = await getRewardList();
+                if (list.length === 0) {
+                    document.querySelector("#reward-list").innerHTML = `<i class="far fa-face-smile"></i>&nbsp;データがありません。`;
+                    return;
+                }
+                document.querySelector("#reward-search").style.display = "block";
+                document.querySelector("#reward-list").classList.add("hasData");
+                document.querySelector("#reward-list").innerHTML = "<ul></ul>";
+
+                for (let voter of list) {
+                    document.querySelector("#reward-list ul").innerHTML += `<li id="${voter.address}" class="reward-data"></li>`;
+                    document.querySelector(`#${voter.address}`).innerHTML = `<div class="title">${voter.address}</div>`;
+                    document.querySelector(`#${voter.address}`).innerHTML += `<div>${lisk.transactions.convertBeddowsToLSK(voter.reward)} LSK</div>`;
+                }
+            } catch (err) {
+                document.querySelector("#reward-list").innerHTML = `<i class="far fa-face-dizzy"></i>&nbsp;取得できませんでした。`;
+            }
+        }
+
+        const findData = (val) => {
+            const list = document.querySelectorAll("li.reward-data");
+            for (let li of list) {
+                if (val === "" || li.id.indexOf(val) >= 0) li.style.display = "block";
+                else li.style.display = "none";
+            }
+        }
+
+        let totalVotesReceived = 0;
+        let voteWeight = 0;
+        const setValidatorInfo = async() => {
+            try {
+                const data = await getMyAccount();
+                totalVotesReceived = +lisk.transactions.convertBeddowsToLSK(data.dpos.delegate.totalVotesReceived);
+                voteWeight = +lisk.transactions.convertBeddowsToLSK(data.dpos.delegate.voteWeight);
+            } catch (err) {
+                // 何もしない
+            }
+        }
+
+        const calcExpValue = (val) => {
+            const vote = Math.ceil(+val / 10) * 10;
+            const total = +totalVotesReceived + vote;
+            const self = +voteWeight / 10;
+            const block = 580;
+            const rate = 0.5;
+            const result = Math.floor(vote / (total - self) * (block * rate) * Math.pow(10, 8)) / Math.pow(10, 8);
+
+            document.querySelector("#calculate-data").innerHTML = `<div>1週間の報酬は <b>${result}LSK</b> くらいです。</div>`;
+            document.querySelector("#calculate-data").innerHTML += `<div class="title" style="margin-top: 10px;">以下で計算しています。</div>`; 
+            document.querySelector("#calculate-data").innerHTML += `<ul></ul>`;
+            document.querySelector("#calculate-data ul").innerHTML = `<li><div class="title">投票数</div><div>${vote}LSK</div></li>`;
+            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">総得票数</div><div>${total}LSK</div></li>`;
+            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">自己投票数</div><div>${self}LSK</div></li>`;
+            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">ブロック報酬</div><div>${block}LSK</div></li>`;
+            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">報酬割合</div><div>${rate * 100}%</div></li>`;
+            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">計算式</div><div>${vote} / (${total} - ${self}) * (${block} * ${rate})</div></li>`;
+
+            document.querySelector("#calculate-data").style.display = "block";
+        }
+
+        (async() => {
+            document.querySelector("#reward-search input").addEventListener("input", (event) => findData(event.target.value));
+            document.querySelector("#calculate-exp input").addEventListener("input", (event) => calcExpValue(event.target.value));
+            await setRewardList();
+            await setValidatorInfo();
+        })();
+    </script>
+</div>

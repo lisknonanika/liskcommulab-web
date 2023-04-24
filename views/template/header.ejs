@@ -1,0 +1,38 @@
+<div class="commulab">
+    <div><a href="/"><img src="./image/commulab-Logo.png" class="logo" /></a></div>
+    <div class="name"><a href="/">Lisk Commulab</a></div>
+</div>
+<nav>
+    <ul>
+        <li>
+            <a href="/" id="menu-home">HOME</a>
+        </li>
+        <li>
+            <a href="/staking" id="menu-home">STAKING</a>
+        </li>
+        <li>
+            <a id="menu-tool"><span id="menu-tool-toggle"><i class="fas fa-chevron-down"></i></span>&nbsp;TOOL</a>
+            <ul id="menu-tool-sub" style="display: none;">
+                <li><a href="/network-monitor">NETWORK MONITOR</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<script>
+    document.querySelector("#menu-tool").addEventListener("click", function(event) {
+        if (document.querySelector("#menu-tool-sub").style.display === "none") {
+            document.querySelector("#menu-tool-sub").style.display = "block";
+            document.querySelector("#menu-tool-toggle").innerHTML = "<i class='fas fa-chevron-up'></i>";
+            return;
+        }
+        document.querySelector("#menu-tool-sub").style.display = "none";
+        document.querySelector("#menu-tool-toggle").innerHTML = "<i class='fas fa-chevron-down'></i>";
+    }, false);
+    
+    document.querySelector("body").addEventListener("click", function(event) {
+        if (event.target.id === "menu-tool") return;
+        document.querySelector("#menu-tool-sub").style.display = "none";
+        document.querySelector("#menu-tool-toggle").innerHTML = "<i class='fas fa-chevron-down'></i>";
+    }, false);
+</script>
