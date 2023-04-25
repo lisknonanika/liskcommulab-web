@@ -4,7 +4,7 @@
             <img src="../image/commulab-Logo.png"/>&nbsp;Staking Information
             <span class="open-close"><i class="far fa-square-minus"></i></span>
         </div>
-        <div class="content-description">投票報酬に関する情報</div>
+        <div class="content-description">ステーキング報酬に関する情報</div>
         <div class="content-main left">
             <div class="content open">
                 <div>commulabは以下の通りに報酬の計算と支払いを行っています&nbsp;<i class="far fa-face-laugh-beam"></i></div>
@@ -27,8 +27,8 @@
                         <div class="title">注意事項</div>
                         <div><i class="fas fa-thumbtack"></i>&nbsp;報酬が0.1LSK以上溜まっている場合のみ支払われます。</div>
                         <div><i class="fas fa-thumbtack"></i>&nbsp;送信手数料を差し引いた枚数が受取枚数になります。</div>
-                        <div><i class="fas fa-thumbtack"></i>&nbsp;1ブロックあたりの投票報酬計算は下記計算式で算出されます。</div>
-                        <div style="padding-left: 1.4rem;">投票数 / (総得票数 - 自己投票数) * (ブロック報酬 * 報酬割合)</div>
+                        <div><i class="fas fa-thumbtack"></i>&nbsp;1ブロックあたりのステーキング報酬計算は下記計算式で算出されます。</div>
+                        <div style="padding-left: 1.4rem;">投票数 / (得票数 - 自己投票数) * (ブロック報酬 * 報酬割合)</div>
                     </li>
                 </ul>
             </div>
@@ -40,7 +40,7 @@
             <img src="../image/commulab-Logo.png"/>&nbsp;Reward Check
             <span class="open-close"><i class="far fa-square-minus"></i></span>
         </div>
-        <div class="content-description">溜まっている投票報酬の確認</div>
+        <div class="content-description">溜まっているステーキング報酬の確認</div>
         <div class="content-main right">
             <div class="content open">
                 <div id="reward-search" style="display: none;">
@@ -57,20 +57,20 @@
             <img src="../image/commulab-Logo.png"/>&nbsp;Expectation Check
             <span class="open-close"><i class="far fa-square-minus"></i></span>
         </div>
-        <div class="content-description">1週間の投票報酬(期待値)の確認</div>
+        <div class="content-description">1週間のステーキング報酬(期待値)の確認</div>
         <div class="content-main left">
             <div class="content open">
                 <div id="calculate-exp">
                     <div class="title">注意事項</div>
                     <ul>
                         <li><div>commulabがアクティブ(上位101位以内)であることが前提です。</div></li>
-                        <li><div>commulabの1週間のブロック報酬を580LSKとして計算します。</div></li>
+                        <li><div>1週間のブロック報酬を580LSKとして計算します。</div></li>
                         <li><div>「Staking Information」に記載の計算式で計算します。</div></li>
-                        <li><div>入力値の10LSK未満の値は切り上げます。</div></li>
+                        <li><div>10LSK未満の入力値は切り上げて計算します。</div></li>
                     </ul>
                     <br />
                     <div>1週間の報酬(期待値)の確認が出来ます。</div>
-                    <input type="number" placeholder="投票枚数を入力してください">
+                    <input type="number" placeholder="投票数を入力してください">
                 </div>
                 <div id="calculate-data" style="display: none;"></div>
             </div>
@@ -134,7 +134,7 @@
             document.querySelector("#calculate-data").innerHTML += `<div class="title" style="margin-top: 10px;">以下で計算しています。</div>`; 
             document.querySelector("#calculate-data").innerHTML += `<ul></ul>`;
             document.querySelector("#calculate-data ul").innerHTML = `<li><div class="title">投票数</div><div>${vote}LSK</div></li>`;
-            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">総得票数</div><div>${total}LSK</div></li>`;
+            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">得票数</div><div>${total}LSK</div></li>`;
             document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">自己投票数</div><div>${self}LSK</div></li>`;
             document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">ブロック報酬</div><div>${block}LSK</div></li>`;
             document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">報酬割合</div><div>${rate * 100}%</div></li>`;
