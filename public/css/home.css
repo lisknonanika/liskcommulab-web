@@ -4,6 +4,11 @@
     background-color: rgba(197, 207, 228, 0.9);
 }
 
+.thumbnail img {
+    width: 500px;
+    border: 1px solid #fff;
+}
+
 /* aboutus */
 .aboutus {
     margin-top: 20px;
@@ -59,10 +64,6 @@
     background-image: url("../image/lisk-PencilGuy.png");
 }
 
-.blog .thumbnail img {
-    width: 500px;
-}
-
 .blog .title {
     margin-bottom: 10px;
 }
@@ -100,7 +101,7 @@
 }
 
 @media screen and (max-width: 540px) {
-    .blog .thumbnail img {
+    .thumbnail img  {
         max-width: 100%;
     }
 }

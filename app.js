@@ -69,7 +69,7 @@ const getCommulabBlog = async() => {
             if (node.nodeName === "media:thumbnail") blog.thumbnail = node.textContent;
             if (node.nodeName === "description") blog.description = node.textContent.replace('>続きをみる</a>', ' target="_blank" rel="noopener noreferrer">続きをみる</a>');
             if (node.nodeName === "note:creatorName") blog.writer = node.textContent;
-            if (node.nodeName === "pubDate") blog.date = new Date(node.textContent).toLocaleString();
+            if (node.nodeName === "pubDate") blog.date = new Date(node.textContent).toLocaleString("ja-JP");
             if (node.nodeName === "link") blog.link = node.textContent;
         }
     } catch (err) {
