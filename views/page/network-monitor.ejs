@@ -85,7 +85,7 @@
                 <div>status: ${fetch.status}</div>
                 <div>check: ${changeTimestamp(fetch.checkDate)}</div>
                 <div>response: ${fetch.responseTime} ミリ秒</div>
-                <div class="status-alert">${fetch.downTime === 0 ? "" : `<i class="fas fa-triangle-exclamation"></i>&nbsp;${Math.round(fetch.downTime / 1000)}分くらい前からダウンしてるか激重です。`}</div>
+                <div class="status-alert">${fetch.downTime === 0 ? "" : `<i class="fas fa-triangle-exclamation"></i>&nbsp;${Math.round(fetch.downTime / 1000 / 60)}分くらい前からダウンしてるか激重です。`}</div>
                 </li>
                 `;
                 fetchdom.innerHTML += fetchrow;
