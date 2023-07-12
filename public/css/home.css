@@ -37,12 +37,12 @@
     background-image: url("../image/lisk-Delegates.png");
 }
 
-/* event */
-.event {
+/* information */
+.information {
     margin-top: 30px;
 }
 
-.event .content-main {
+.information .content-main {
     background-image: url("../image/lisk-Notebook.png");
 }
 
