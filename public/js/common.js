@@ -16,6 +16,15 @@ const getRewardList = async () => {
     return json.voter;
 }
 
+const getBlock = async () => {
+    const response = await fetch(
+        `https://testnet-service.lisk.com/api/v2/blocks?limit=1&offset=0`,
+        {mode: 'cors'}
+    );
+    const json = await response.json();
+    return json.data[0];
+}
+
 const toggleContent = (node) => {
     const content = node.querySelector(".content");
     const icon = node.querySelector(".open-close i");
