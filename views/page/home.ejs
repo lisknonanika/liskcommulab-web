@@ -46,15 +46,9 @@
         <div class="content-description">commulabからのお知らせ</div>
         <div class="content-main right">
             <div class="content open">
-                <div class="title" style="color: rgb(190, 42, 42);">重要！</div>
-                <div style="color: rgb(190, 42, 42);">テストネットのLisk v4移行について公式アナウンスがありました。</div>
-                <div style="color: rgb(190, 42, 42);">詳しくは&nbsp;<a href="https://lisk.com/blog/posts/announcing-lisk-testnet-v4-migration" target="_blank" rel="noopener noreferrer">公式ブログ</a>&nbsp;を確認してください。</div>
-                <div style="color: rgb(190, 42, 42);">なお、おおよその予定日時は以下の通りです。</div>
-                <ul style="color: rgb(190, 42, 42);">
-                    <li><div>移行日時：<span id="migration-date"></span></div></li>
-                    <li><div>移行ブロック：<span id="migration-height"></span></div></li>
-                    <li><div>現在のブロック：<span id="current-height"></span></div></li>
-                </ul>
+                <div class="title" style="color: rgb(190, 42, 42);">重要</div>
+                <div style="color: rgb(190, 42, 42);">テストネットのLisk v4移行は成功しました！</div>
+                <div style="color: rgb(190, 42, 42);">テストネットを試したい方は<a href="https://github.com/LiskHQ/lisk-desktop/releases" target="_blank" rel="noopener noreferrer">Lisk Desctop v3.0.0</a>をご利用ください。</div>
                 <br />
                 <div class="title">更新情報</div>
                 <ul>
@@ -291,29 +285,8 @@
             }
         }
 
-        const setMigrationInfo = async() => {
-            try{
-                const migrationHeight = 20449414;
-                const data = await getBlock();
-                const currentHeight = data.height;
-                const unixTime = new Date().getTime();
-                const dt = new Date(unixTime + ((migrationHeight - currentHeight) * 10000));
-                const migrationDate = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes()).toLocaleString("ja-JP");
-                document.querySelector("#migration-height").innerHTML = migrationHeight;
-                document.querySelector("#current-height").innerHTML = currentHeight;
-                document.querySelector("#migration-date").innerHTML = `${migrationDate}頃`;
-            } catch (err) {
-                document.querySelector("#current-height").innerHTML = `<i class="far fa-face-dizzy"></i>&nbsp;取得できませんでした。`;
-                document.querySelector("#migration-date").innerHTML = "";
-            }
-        }
-
         (() => {
             setValidatorInfo();
-            setMigrationInfo();
-            setInterval(function(){
-                setMigrationInfo();
-            }, 30000)
         })();
     </script>
 </div>
