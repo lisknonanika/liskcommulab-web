@@ -18,7 +18,7 @@ const getRewardList = async () => {
 
 const getBlock = async () => {
     const response = await fetch(
-        `https://testnet-service.lisk.com/api/v2/blocks?limit=1&offset=0`,
+        `https://mainnet-service.lisk.com/api/v2/blocks?limit=1&offset=0`,
         {mode: 'cors'}
     );
     const json = await response.json();
