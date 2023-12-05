@@ -41,6 +41,15 @@ app.get("/network-monitor", (req, res, next) => {
     });
 });
 
+app.get("/reward-checker", (req, res, next) => {
+    res.render("template/index.ejs",
+    {
+        data: {
+            type: "reward-checker"
+        }
+    });
+});
+
 app.listen(port, ()=> {
     console.log(`[start]commulab web(http://127.0.0.1:${port})`);
 });

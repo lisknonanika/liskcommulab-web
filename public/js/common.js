@@ -1,26 +1,8 @@
+const SERVICE_URL = "testnet-service.lisk.com";
+const VALIDATOR_ADDRESS = "lsktj542p3cnuqp4uspyyh3xvjazccofzqgnvdmak";
+
 const getMyAccount = async () => {
-    const response = await fetch(
-        `https://service.lisk.com/api/v2/accounts?username=commulab&isDelegate=true&limit=1&offset=0`,
-        {mode: 'cors'}
-    );
-    const json = await response.json();
-    return json.data[0];
-}
-
-const getRewardList = async () => {
-    const response = await fetch(
-        `https://mainnet-payout.liskcommulab.jp/`,
-        {mode: 'cors'}
-    );
-    const json = await response.json();
-    return json.voter;
-}
-
-const getBlock = async () => {
-    const response = await fetch(
-        `https://mainnet-service.lisk.com/api/v2/blocks?limit=1&offset=0`,
-        {mode: 'cors'}
-    );
+    const response = await fetch(`https://${SERVICE_URL}/api/v3/pos/validators?address=${VALIDATOR_ADDRESS}&limit=1`);
     const json = await response.json();
     return json.data[0];
 }

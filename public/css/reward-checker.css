@@ -1,0 +1,55 @@
+@charset "utf-8";
+.content {
+    border: 1px solid #dddddd;
+    background-color: rgba(221, 221, 221, 0.9);
+}
+
+/* validator list */
+.validator-list {
+    margin-top: 20px;
+}
+
+.validator-list .content-main {
+    background-image: url("../image/lisk-Delegates.png");
+}
+
+#validator-info {
+    height: 400px;
+}
+
+#validator-info.hasData {
+    overflow-y: scroll;
+}
+
+#validator-info ul li {
+    border-bottom: 1px dashed #ccc;
+    list-style: none;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+/* reward-list */
+.reward-list {
+    margin-top: 30px;
+}
+
+.reward-list .content-main {
+    background-image: url("../image/lisk-Treasure.png");
+}
+
+#calculate-exp input {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 95%;
+    border: 1px solid #ccc;
+    border-radius: 10px; 
+}
+
+#calculate-data {
+    padding: 10px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+    height: 400px;
+    overflow-y: scroll;
+}

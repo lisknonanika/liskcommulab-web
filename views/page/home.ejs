@@ -24,7 +24,7 @@
                         <div><a href="https://liskscan.com/account/lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw" target="_blank" rel="noopener noreferrer">lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw</a></div>
                     </li>
                     <li>
-                        <div class="title">ランク (得票数 / 最大票数)</div>
+                        <div class="title">ランク</div>
                         <div id="info-rank">取得中です。</div>
                     </li>
                     <li>
@@ -46,16 +46,6 @@
         <div class="content-description">commulabからのお知らせ</div>
         <div class="content-main right">
             <div class="content open">
-                <div class="title" style="color: rgb(190, 42, 42);">重要！</div>
-                <div style="color: rgb(190, 42, 42);">メインネットのLisk v4移行について公式アナウンスがありました。</div>
-                <div style="color: rgb(190, 42, 42);">詳しくは&nbsp;<a href="https://lisk.com/blog/posts/announcing-lisk-mainnet-v4-migration" target="_blank" rel="noopener noreferrer">公式ブログ</a>&nbsp;を確認してください。</div>
-                <div style="color: rgb(190, 42, 42);">なお、おおよその予定日時は以下の通りです。</div>
-                <ul style="color: rgb(190, 42, 42);">
-                    <li><div>移行日時：<span id="migration-date"></span></div></li>
-                    <li><div>移行ブロック：<span id="migration-height"></span></div></li>
-                    <li><div>現在のブロック：<span id="current-height"></span></div></li>
-                </ul>
-                <br />
                 <div class="title">更新情報</div>
                 <ul>
                     <li><div>2023/11/14：Lisk公式アナウンスを更新(10月度財務報告)</div></li>
@@ -68,11 +58,7 @@
                 <div class="title">イベント情報</div>
                 <ul>
                     <li>
-                        <div style="font-weight: bold;">CommuLab設立2周年：報酬100%還元キャンペーン (終了)</div>
-                        <div>日頃の感謝を込めて下記期間の投票報酬が<span style="color: rgb(190, 42, 42);font-weight: bold;">100%</span>(通常50%)になります！</div>
-                        <div>期間：10/29(日)～11/4(土)</div>
-                        <div>報酬払出：11/5(日)</div>
-                        <div>詳しくは <a href="https://twitter.com/liskcommulab/status/1717367947054723287" target="_blank" rel="noopener noreferrer">こちら</a></div>
+                        <div>開催中のイベントはありません。</div>
                     </li>
                 </ul>
             </div>
@@ -289,38 +275,14 @@
         const setValidatorInfo = async() => {
             try {
                 const data = await getMyAccount();
-                const rank = data.dpos.delegate.rank;
-                const totalVotesReceived = lisk.transactions.convertBeddowsToLSK(data.dpos.delegate.totalVotesReceived);
-                const voteWeight = lisk.transactions.convertBeddowsToLSK(data.dpos.delegate.voteWeight);
-                document.querySelector("#info-rank").innerHTML = `${rank} (${totalVotesReceived} / ${voteWeight})`;
+                document.querySelector("#info-rank").innerHTML = `${data.rank}`;
             } catch (err) {
                 document.querySelector("#info-rank").innerHTML = `<i class="far fa-face-dizzy"></i>&nbsp;取得できませんでした。`;
-            }
-        }
-        
-        const setMigrationInfo = async() => {
-            try{
-                const migrationHeight = 23390991;
-                const data = await getBlock();
-                const currentHeight = data.height;
-                const unixTime = new Date().getTime();
-                const dt = new Date(unixTime + ((migrationHeight - currentHeight) * 10000));
-                const migrationDate = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes()).toLocaleString("ja-JP");
-                document.querySelector("#migration-height").innerHTML = migrationHeight;
-                document.querySelector("#current-height").innerHTML = currentHeight;
-                document.querySelector("#migration-date").innerHTML = `${migrationDate}頃`;
-            } catch (err) {
-                document.querySelector("#current-height").innerHTML = `<i class="far fa-face-dizzy"></i>&nbsp;取得できませんでした。`;
-                document.querySelector("#migration-date").innerHTML = "";
             }
         }
 
         (() => {
             setValidatorInfo();
-            setMigrationInfo();
-            setInterval(function(){
-                setMigrationInfo();
-            }, 30000);
         })();
     </script>
 </div>

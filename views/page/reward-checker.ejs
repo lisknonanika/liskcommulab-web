@@ -1,0 +1,154 @@
+<div id="reward-checker">
+    <div class="validator-list">
+        <div class="content-title">
+            <i class="fas fa-users"></i>&nbsp;Validator List
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">バリデータのステーキング報酬関連情報</div>
+        <div class="content-main left">
+            <div class="content open">
+                <div id="validator-info">取得中です。</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="reward-list">
+        <div class="content-title">
+            <i class="fas fa-coins"></i>&nbsp;Expectation Check
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">1週間のステーキング報酬(期待値)の確認</div>
+        <div class="content-main right">
+            <div class="content open">
+                <div id="calculate-exp">
+                    <div class="title">注意事項</div>
+                    <ul>
+                        <li><div>各バリデータがアクティブ(上位101位以内)であることが前提です。</div></li>
+                        <li><div>1週間のブロック生成が580回として計算します。</div></li>
+                        <li>
+                            <div>1ブロックあたりのステーキング報酬は以下の計算式で計算します。</div>
+                            <div>(投票数 / 得票数) * (ブロック報酬 * 報酬割合)</div>
+                        </li>
+                        <li><div>10LSK未満の入力値は切り上げて計算します。</div></li>
+                    </ul>
+                    <br />
+                    <div>1週間の報酬(期待値)の確認が出来ます。</div>
+                    <input type="number" placeholder="投票数を入力してください">
+                </div>
+                <div id="calculate-data" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <link rel="stylesheet" href="../css/reward-checker.css" type="text/css" />
+    <script src="../js/common.js" charset="utf-8"></script>
+    <script>
+        let validatorsList = [];
+
+        getCurrentBlock = async() => {
+            const ret = await fetch(`https://${SERVICE_URL}/api/v3/blocks?limit=1`);
+            const json = await ret.json();
+            return json.data[0].height;
+        }
+        getValidators = async() => {
+            const ret = await fetch(`https://${SERVICE_URL}/api/v3/pos/validators?sort=rank:asc&limit=101`);
+            const json = await ret.json();
+            return json.data;
+        }
+        getBFTParameters = async(height) => {
+            const body = {
+                "endpoint": "consensus_getBFTParameters",
+                "params": {
+                    "height": height
+                }
+            }
+            const ret = await fetch(`https://${SERVICE_URL}/api/v3/invoke`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            });
+            const json = await ret.json();
+            return json.data;
+        }
+
+        const calcExpValue = (val) => {
+            if (!val || val < 10) {
+                document.querySelector("#calculate-data").innerHTML = "";
+                document.querySelector("#calculate-data").style.display = "none";
+                return;
+            }
+
+            const vote = Math.ceil(+val / 10) * 10;
+
+            let validatorInfoHtml = "";
+            for (const v of validatorsList) {
+                const total = +v.totalStake + vote;
+                const block = v.blockReward;
+                const rate = v.stakingRate / 100;
+                const result = Math.floor(((vote / total) * (block * rate)) * 580 * Math.pow(10, 8)) / Math.pow(10, 8);
+                if (result === 0) continue;
+                validatorInfoHtml +=
+                    `<li>` +
+                    `<div class="title">${v.rank}：${v.name}</div>` +
+                    `<div>ステーキング報酬：${result}LSK</div>` +
+                    `</li>`;
+            }
+            document.querySelector("#calculate-data").innerHTML = `<ul>${validatorInfoHtml}</ul>`;
+            document.querySelector("#calculate-data").style.display = "block";
+        }
+
+        (async() => {
+            document.querySelector("#calculate-exp input").addEventListener("input", (event) => calcExpValue(event.target.value));
+            validatorsList = [];
+            const height = await getCurrentBlock();
+            const validators = await getValidators();
+            const bFTParameters = await getBFTParameters(height);
+
+            let totalBftWeight = 0;
+            for await (const validator of validators) {
+                totalBftWeight += +bFTParameters.validators.find((d) => d.address === validator.address).bftWeight;
+            }
+
+            for await (const validator of validators) {
+                const bftWeight = +bFTParameters.validators.find((d) => d.address === validator.address).bftWeight;
+                const commission = +validator.commission / 100;
+                const blockReward = Math.floor((0.1 + (bftWeight * 90.9) / totalBftWeight) * 100000000) / 100000000;
+                const stakingRate = 100 - commission;
+                const stakingReward = Math.floor(blockReward * (stakingRate / 100) * 100000000) / 100000000;
+                const validatorWeight = +validator.validatorWeight / 100000000;
+                const totalStake = +validator.totalStake / 100000000;
+                
+                validatorsList.push({
+                    rank: validator.rank,
+                    name: validator.name,
+                    address: validator.address,
+                    commission: commission,
+                    blockReward: blockReward,
+                    stakingRate: stakingRate,
+                    stakingReward: stakingReward,
+                    bftWeight: bftWeight,
+                    validatorWeight: validatorWeight,
+                    totalStake: totalStake
+                });
+            }
+
+            if (validatorsList.size === 0) return;
+
+            let validatorInfoHtml = "";
+            for await (const v of validatorsList) {
+                validatorInfoHtml +=
+                    `<li>` +
+                    `<div class="title">${v.rank}：${v.name}</div>` +
+                    `<div>報酬割合：${v.stakingRate}%</div>` +
+                    `<div>ブロック報酬：${v.blockReward}LSK</div>` +
+                    `<div>ステーキング報酬：${v.stakingReward}LSK</div>` +
+                    `<div>得票数：${v.totalStake}</div>` +
+                    `</li>`;
+            }
+            document.querySelector("#validator-info").innerHTML = `<ul>${validatorInfoHtml}</ul>`;
+            document.querySelector("#validator-info").classList.add("hasData");
+        })();
+    </script>
+</div>
