@@ -7,6 +7,7 @@
         <div class="content-description">バリデータのステーキング報酬関連情報</div>
         <div class="content-main left">
             <div class="content open">
+                <div style="color: rgb(190, 42, 42);">現在、移行期間中です。表示情報は移行期間終了後の目安となります。</div>
                 <div id="validator-info">取得中です。</div>
             </div>
         </div>
@@ -105,14 +106,20 @@
             const height = await getCurrentBlock();
             const validators = await getValidators();
             const bFTParameters = await getBFTParameters(height);
-
+            
             let totalBftWeight = 0;
             for await (const validator of validators) {
-                totalBftWeight += +bFTParameters.validators.find((d) => d.address === validator.address).bftWeight;
+                const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
+                if (bFTParameter !== undefined) {
+                    totalBftWeight += +bFTParameter.bftWeight;
+                }
             }
-
+            console.log(bFTParameters)
             for await (const validator of validators) {
-                const bftWeight = +bFTParameters.validators.find((d) => d.address === validator.address).bftWeight;
+                const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
+                if (bFTParameter === undefined) continue;
+
+                const bftWeight = +bFTParameter.bftWeight;
                 const commission = +validator.commission / 100;
                 const blockReward = Math.floor((0.1 + (bftWeight * 90.9) / totalBftWeight) * 100000000) / 100000000;
                 const stakingRate = 100 - commission;

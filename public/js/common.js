@@ -1,5 +1,5 @@
-const SERVICE_URL = "testnet-service.lisk.com";
-const VALIDATOR_ADDRESS = "lsktj542p3cnuqp4uspyyh3xvjazccofzqgnvdmak";
+const SERVICE_URL = "mainnet-service.lisk.com";
+const VALIDATOR_ADDRESS = "lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw";
 
 const getMyAccount = async () => {
     const response = await fetch(`https://${SERVICE_URL}/api/v3/pos/validators?address=${VALIDATOR_ADDRESS}&limit=1`);
