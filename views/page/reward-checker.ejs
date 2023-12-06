@@ -31,6 +31,7 @@
                             <div>(投票数 / 得票数) * (ブロック報酬 * 報酬割合)</div>
                         </li>
                         <li><div>10LSK未満の入力値は切り上げて計算します。</div></li>
+                        <li><div>報酬が多い順に表示します。</div></li>
                     </ul>
                     <br />
                     <div>1週間の報酬(期待値)の確認が出来ます。</div>
@@ -83,18 +84,29 @@
 
             const vote = Math.ceil(+val / 10) * 10;
 
-            let validatorInfoHtml = "";
+            const calcExpValueList = [];
             for (const v of validatorsList) {
+                if (v.stakingRate === 0 || v.stakingReward === 0 || v.commission === 100) continue;
+
                 const total = +v.totalStake + vote;
                 const block = v.blockReward;
                 const rate = v.stakingRate / 100;
-                const result = Math.floor(((vote / total) * (block * rate)) * 580 * Math.pow(10, 8)) / Math.pow(10, 8);
-                if (result === 0) continue;
+                const reward = Math.floor(((vote / total) * (block * rate)) * 580 * Math.pow(10, 8)) / Math.pow(10, 8);
+                calcExpValueList.push({
+                    "address": v.address,
+                    "name": v.name, 
+                    "reward": reward
+                });
+            }
+            
+            let validatorInfoHtml = "";
+            calcExpValueList.sort((a, b) => b.reward - a.reward); 
+            for (const v of calcExpValueList) {
                 validatorInfoHtml +=
-                    `<li>` +
-                    `<div class="title">${v.rank}：${v.name}</div>` +
-                    `<div>ステーキング報酬：${result}LSK</div>` +
-                    `</li>`;
+                        `<li>` +
+                        `<div class="title"><a href="https://liskscan.com/account/${v.address}" target="_blank" rel="noopener noreferrer">${v.name}</a></div>` +
+                        `<div class="lpad10">ステーキング報酬：${v.reward}LSK</div>` +
+                        `</li>`;
             }
             document.querySelector("#calculate-data").innerHTML = `<ul>${validatorInfoHtml}</ul>`;
             document.querySelector("#calculate-data").style.display = "block";
@@ -109,13 +121,13 @@
             
             let totalBftWeight = 0;
             for await (const validator of validators) {
+                if (validator.status.toLowerCase() !== "active") continue;
                 const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
-                if (bFTParameter !== undefined) {
-                    totalBftWeight += +bFTParameter.bftWeight;
-                }
+                if (bFTParameter !== undefined) totalBftWeight += +bFTParameter.bftWeight;
             }
-            console.log(bFTParameters)
+
             for await (const validator of validators) {
+                if (validator.status.toLowerCase() !== "active") continue;
                 const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
                 if (bFTParameter === undefined) continue;
 
@@ -147,11 +159,12 @@
             for await (const v of validatorsList) {
                 validatorInfoHtml +=
                     `<li>` +
-                    `<div class="title">${v.rank}：${v.name}</div>` +
-                    `<div>報酬割合：${v.stakingRate}%</div>` +
-                    `<div>ブロック報酬：${v.blockReward}LSK</div>` +
-                    `<div>ステーキング報酬：${v.stakingReward}LSK</div>` +
-                    `<div>得票数：${v.totalStake}</div>` +
+                    `<div class="title"><a href="https://liskscan.com/account/${v.address}" target="_blank" rel="noopener noreferrer">${v.name}</a></div>` +
+                    `<div class="lpad10">ランク：${v.rank}</div>` +
+                    `<div class="lpad10">報酬割合：${v.stakingRate}%</div>` +
+                    `<div class="lpad10">ブロック報酬：${v.blockReward}LSK</div>` +
+                    `<div class="lpad10">ステーキング報酬：${v.stakingReward}LSK</div>` +
+                    `<div class="lpad10">得票数：${v.totalStake}</div>` +
                     `</li>`;
             }
             document.querySelector("#validator-info").innerHTML = `<ul>${validatorInfoHtml}</ul>`;

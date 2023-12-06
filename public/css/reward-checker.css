@@ -21,6 +21,10 @@
     overflow-y: scroll;
 }
 
+#validator-info ul {
+    padding-left: 5px;
+}
+
 #validator-info ul li {
     border-bottom: 1px dashed #ccc;
     list-style: none;
@@ -52,4 +56,15 @@
     background-color: rgba(255, 255, 255, 0.5);
     height: 400px;
     overflow-y: scroll;
+}
+
+#calculate-data ul {
+    padding-left: 5px;
+}
+
+#calculate-data ul li {
+    border-bottom: 1px dashed #ccc;
+    list-style: none;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
 }

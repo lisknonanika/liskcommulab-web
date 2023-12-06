@@ -207,6 +207,10 @@ header nav ul li a:active {
     margin: 0 !important;
 }
 
+.lpad10 {
+    padding-left: 10px;
+}
+
 @media screen and (max-width: 540px) {
     .content {
         max-width: calc(100% - 20px);
