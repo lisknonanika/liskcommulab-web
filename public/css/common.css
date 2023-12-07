@@ -191,6 +191,11 @@ header nav ul li a:active {
     font-weight: bold;
 }
 
+.content .memo {
+    font-size: 1.1rem;
+    color: #666;
+}
+
 .content .ref {
     text-align: center;
     background-color: #ebeff5;
