@@ -54,14 +54,13 @@
             <img src="../image/commulab-Logo.png"/>&nbsp;Expectation Check
             <span class="open-close"><i class="far fa-square-minus"></i></span>
         </div>
-        <div class="content-description">1週間のステーキング報酬(期待値)の確認</div>
+        <div class="content-description">ステーキング報酬(期待値)の確認</div>
         <div class="content-main right">
             <div class="content open">
                 <div id="calculate-exp">
                     <div class="title">注意事項</div>
                     <ul>
                         <li><div>commulabがアクティブ(上位101位以内)であることが前提です。</div></li>
-                        <li><div>1週間のブロック生成が580回として計算します。</div></li>
                         <li>
                             <div>1ブロックあたりのステーキング報酬は以下の計算式で計算します。</div>
                             <div>(投票数 / 得票数) * (ブロック報酬 * 報酬割合)</div>
@@ -69,7 +68,7 @@
                         <li><div>10LSK未満の入力値は切り上げて計算します。</div></li>
                     </ul>
                     <br />
-                    <div>1週間の報酬(期待値)の確認が出来ます。</div>
+                    <div>報酬(期待値)の確認が出来ます。</div>
                     <input type="number" placeholder="投票数を入力してください">
                 </div>
                 <div id="calculate-data" style="display: none;"></div>
@@ -88,12 +87,6 @@
         let totalStake = 0;
         let validatorWeight = 0;
 
-        const getReward = async() => {
-            const ret = await fetch(`https://${SERVICE_URL}/api/v3/blocks?generatorAddress=${VALIDATOR_ADDRESS}&limit=1`);
-            const json = await ret.json();
-            const data = json.data[0];
-            blockReward = +data.reward / 100000000;
-        }
         const getValidatorInfo = async() => {
             const data = await getMyAccount();
             stakingRate = 100.00 - (+data.commission / 100);
@@ -114,21 +107,31 @@
             const total = +totalStake + vote;
             const block = blockReward;
             const rate = stakingRate / 100;
-            const result = Math.floor(((vote / total) * (block * rate)) * 580 * Math.pow(10, 8)) / Math.pow(10, 8);
+            const result = Math.floor(((vote / total) * (block * rate)) * Math.pow(10, 8)) / Math.pow(10, 8);
 
-            document.querySelector("#calculate-data").innerHTML = `<div>1週間の報酬は <b>${result}LSK</b> くらいです。</div>`;
+            document.querySelector("#calculate-data").innerHTML = `<div class="title">ステーキング報酬</div>`; 
+            document.querySelector("#calculate-data").innerHTML +=
+                `<ul>` +
+                `<li><span class="title">1ブロックあたり：</span><span>${result}LSK</span>` +
+                `<li><span class="title">1日あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</span></li>` +
+                `<li><span class="title">1週間あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 7) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</span></li>` +
+                `<li><span class="title">1ヵ月あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 30) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</span></li>` +
+                `<li><span class="title">1年あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 365) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</span></li>` +
+                `</ul>`;
             document.querySelector("#calculate-data").innerHTML += `<div class="title" style="margin-top: 10px;">以下で計算しています。</div>`; 
-            document.querySelector("#calculate-data").innerHTML += `<ul></ul>`;
-            document.querySelector("#calculate-data ul").innerHTML = `<li><div class="title">投票数</div><div>${vote}LSK</div></li>`;
-            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">得票数</div><div>${total}LSK</div></li>`;
-            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">ブロック報酬</div><div>${block}LSK</div></li>`;
-            document.querySelector("#calculate-data ul").innerHTML += `<li><div class="title">報酬割合</div><div>${rate * 100}%</div></li>`;
+            document.querySelector("#calculate-data").innerHTML += 
+                `<ul>` +
+                `<li><span class="title">投票数：</span><span>${vote}LSK</span></li>` +
+                `<li><span class="title">得票数：</span><span>${total}LSK</span></li>` +
+                `<li><span class="title">ブロック報酬：</span><span>${block}LSK</span></li>` +
+                `<li><span class="title">報酬割合：</span><span>${rate * 100}%</span></li>` +
+                `</ul>`;
             document.querySelector("#calculate-data").style.display = "block";
         }
 
         (async() => {
             document.querySelector("#calculate-exp input").addEventListener("input", (event) => calcExpValue(event.target.value));
-            await getReward();
+            await getMyReward();
             await getValidatorInfo();
             document.querySelector("#staking-rate").innerHTML = `${stakingRate}%`;
             document.querySelector("#block-reward").innerHTML = `${blockReward}LSK`;

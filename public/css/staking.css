@@ -13,51 +13,6 @@
     background-image: url("../image/lisk-Treasure.png");
 }
 
-/* staking-reward */
-.staking-reward {
-    margin-top: 30px;
-}
-
-.staking-reward .content-main {
-    background-image: url("../image/lisk-Hodler.png");
-}
-
-#reward-search input {
-    font-size: 1.6rem;
-    margin-bottom: 10px;
-    padding: 10px;
-    width: 95%;
-    border: 1px solid #ccc;
-    border-radius: 10px; 
-}
-
-#reward-list {
-    height: 400px;
-}
-
-#reward-list.hasData {
-    padding: 10px;
-    border-radius: 12px;
-    background-color: rgba(255, 255, 255, 0.5);
-    overflow-y: scroll;
-}
-
-#reward-list ul {
-    padding-left: 5px;
-}
-
-#reward-list ul li {
-    border-bottom: 1px dashed #ccc;
-    list-style: none;
-}
-
-#reward-list ul li div.title {
-    width: 90%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 /* staking-expectation */
 .staking-expectation {
     margin-top: 30px;
@@ -80,4 +35,9 @@
     padding: 10px;
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.5);
+}
+
+#calculate-data li {
+    margin: 0px;
+    margin-bottom: 3px;
 }
