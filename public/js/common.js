@@ -38,7 +38,6 @@ const getRewardsAssigned = async(address, from, to, offset, limit) => {
         if (data !== undefined) {
             for await(const d of data) {
                 rewardsAssignedInfo1.push({
-                    transactionId: d.id,
                     validatorAddress: d.data.validatorAddress,
                     tokenID: d.data.tokenID,
                     amount: d.data.amount,
