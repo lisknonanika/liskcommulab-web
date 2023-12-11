@@ -122,8 +122,8 @@
             const toTime = (new Date(`${toDate} 23:59:59`)).getTime() / 1000;
             const rewardsAssigned = await getRewardsAssigned(address, fromTime, toTime, 0, 100);
             if (!rewardsAssigned || rewardsAssigned.length === 0) {
-                document.querySelector("#history-data").innerHTML = "";
-                document.querySelector("#history-data").style.display = "none";
+                document.querySelector("#history-data").innerHTML = "データがありません。";
+                document.querySelector("#history-data").style.display = "block";
                 return;
             }
             
