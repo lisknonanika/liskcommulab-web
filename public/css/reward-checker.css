@@ -67,3 +67,64 @@
     margin: 0px;
     margin-bottom: 3px;
 }
+
+
+/* reward-history */
+.reward-history {
+    margin-top: 30px;
+}
+
+.reward-history .content-main {
+    background-image: url("../image/lisk-Notebook.png");
+}
+
+#history-form input {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 95%;
+    border: 1px solid #ccc;
+    border-radius: 10px; 
+}
+
+#history-form .center-button {
+    text-align: center;
+}
+
+#history-form .center-button button {
+    font-size: 1.6rem;
+    margin: 0px;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 95%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: rgb(22, 46, 167);
+    color: #fff;
+}
+
+#history-form .center-button button:active {
+    -webkit-transform: translate(-1px,1px);
+    -moz-transform: translate(-1px,1px);
+    transform: translate(-1px,1px);
+    background-color: rgba(22, 46, 167, 0.8);
+}
+
+#history-data {
+    padding: 10px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+    height: 400px;
+    overflow-y: scroll;
+}
+
+#history-data ul {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px dashed #ccc;
+}
+
+#history-data li {
+    margin: 0px;
+    margin-bottom: 3px;
+}

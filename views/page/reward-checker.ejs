@@ -40,13 +40,35 @@
             </div>
         </div>
     </div>
+
+    <div class="reward-history">
+        <div class="content-title">
+            <i class="fas fa-coins"></i>&nbsp;Reward History
+            <span class="open-close"><i class="far fa-square-minus"></i></span>
+        </div>
+        <div class="content-description">受け取ったステーキング報酬の確認</div>
+        <div class="content-main left">
+            <div class="content open">
+                <div id="history-form">
+                    <div>報酬を確認したいアドレスを入力してください。</div>
+                    <div><input type="text" id="address" placeholder="アドレスを入力してください"></div>
+                    <div>報酬を確認したい期間の開始日を入力してください。</div>
+                    <div><input type="date" id="fromDate"></div>
+                    <div>報酬を確認したい期間の終了日を入力してください。</div>
+                    <div><input type="date" id="toDate"></div>
+                    <div class="center-button"><button type="button">確認</button></div>
+                </div>
+                <div id="history-data" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
     
     <link rel="stylesheet" href="../css/reward-checker.css" type="text/css" />
     <script src="../js/common.js" charset="utf-8"></script>
     <script>
         let validatorsList = [];
         const calcExpValue = (val) => {
-            if (!val || val < 10) {
+            if (!validatorsList || validatorsList.length === 0 || !val || val < 10) {
                 document.querySelector("#calculate-data").innerHTML = "";
                 document.querySelector("#calculate-data").style.display = "none";
                 return;
@@ -86,8 +108,59 @@
             document.querySelector("#calculate-data").style.display = "block";
         }
 
+        const getRewardHistory = async() => {
+            const address = document.querySelector("#address").value;
+            const fromDate = document.querySelector("#fromDate").value;
+            const toDate = document.querySelector("#toDate").value;
+            if (!address || !fromDate || !toDate) {
+                document.querySelector("#history-data").innerHTML = "";
+                document.querySelector("#history-data").style.display = "none";
+                return;
+            }
+
+            const fromTime = (new Date(`${fromDate} 00:00:00`)).getTime() / 1000;
+            const toTime = (new Date(`${toDate} 23:59:59`)).getTime() / 1000;
+            const rewardsAssigned = await getRewardsAssigned(address, fromTime, toTime, 0, 100);
+            if (!rewardsAssigned || rewardsAssigned.length === 0) {
+                document.querySelector("#history-data").innerHTML = "";
+                document.querySelector("#history-data").style.display = "none";
+                return;
+            }
+            
+            const sumData = rewardsAssigned.reduce((result, current) => {
+                const data = result.find((d) => d.timestamp === current.timestamp);
+                if (data) {
+                    data.amount += +current.amount;
+                } else {
+                    result.push({
+                        timestamp: current.timestamp,
+                        amount: +current.amount
+                    });
+                }
+                return result;
+            }, []);
+            
+            let historyHtml = "";
+            sumData.sort((a, b) => a.timestamp - b.timestamp); 
+            for (const v of sumData) {
+                const date = new Date(v.timestamp * 1000);
+                historyHtml +=
+                        `<div class="title">${date.toLocaleDateString()} ${date.toLocaleTimeString()}</div>` +
+                        `<ul>` +
+                        `<li><span class="title">報酬：</span>${v.amount / 100000000}LSK</li>` +
+                        `</ul>`;
+            }
+            document.querySelector("#history-data").innerHTML = `${historyHtml}`;
+            document.querySelector("#history-data").style.display = "block";
+        }
+
         (async() => {
             document.querySelector("#calculate-exp input").addEventListener("input", (event) => calcExpValue(event.target.value));
+            document.querySelector("#history-form button").addEventListener("click", (event) => getRewardHistory());
+
+            document.querySelector("#fromDate").value = getYMD(-7);
+            document.querySelector("#toDate").value = getYMD();
+            
             validatorsList = [];
             const height = await getCurrentHeight();
             const validators = await getValidators();
@@ -127,7 +200,7 @@
                 });
             }
 
-            if (validatorsList.size === 0) return;
+            if (validatorsList.length === 0) return;
 
             let validatorInfoHtml = "";
             for await (const v of validatorsList) {

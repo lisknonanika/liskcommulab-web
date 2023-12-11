@@ -27,6 +27,37 @@ const getValidators = async() => {
     return json.data;
 }
 
+const getRewardsAssigned = async(address, from, to, offset, limit) => {
+    try {
+        let rewardsAssignedInfo = [];
+        const rewardsAssignedInfo1 = [];
+        const ret = await fetch(`https://${SERVICE_URL}/api/v3/events?senderAddress=${address}&timestamp=${from}:${to}&offset=${offset}&limit=${limit}&sort=timestamp:asc`);
+        const json = await ret.json();
+        if (!json.data) return [];
+        const data = json.data.filter((d) => d.module === "pos" & d.name === "rewardsAssigned");
+        if (data !== undefined) {
+            for await(const d of data) {
+                rewardsAssignedInfo1.push({
+                    transactionId: d.id,
+                    validatorAddress: d.data.validatorAddress,
+                    tokenID: d.data.tokenID,
+                    amount: d.data.amount,
+                    timestamp: d.block.timestamp
+                });
+            }
+        }
+        if (json.data && json.meta.count + json.meta.offset < json.meta.total) {
+            const rewardsAssignedInfo2 = await getRewardsAssigned(address, offset + limit, limit);
+            rewardsAssignedInfo = rewardsAssignedInfo1.concat(rewardsAssignedInfo2);
+        } else {
+            rewardsAssignedInfo = rewardsAssignedInfo1;
+        }
+        return rewardsAssignedInfo;
+    } catch(err) {
+        return err;
+    }
+}
+
 const getBFTParameters = async(height) => {
     const body = {
         "endpoint": "consensus_getBFTParameters",
@@ -43,6 +74,12 @@ const getBFTParameters = async(height) => {
     });
     const json = await ret.json();
     return json.data;
+}
+
+const getYMD = (days) => {
+    const d = new Date();
+    if (days !== undefined) d.setDate(d.getDate() + days);
+    return `${d.getFullYear()}-${("00" + (d.getMonth() + 1)).slice(-2)}-${("00" + d.getDate()).slice(-2)}`;
 }
 
 const toggleContent = (node) => {
