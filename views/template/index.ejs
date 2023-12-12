@@ -18,6 +18,7 @@
         <%- include('../template/header'); %>
     </header>
     <div id="contents">
+        <div id="layer" style="display: none;"></div>
         <% if (data.type === "home") { %>
             <%- include('../page/home', { data: { blog: data.blog }}); %>
         <% } else if (data.type === "staking") { %>
@@ -26,6 +27,8 @@
             <%- include('../page/network-monitor'); %>
         <% } else if (data.type === "reward-checker") { %>
             <%- include('../page/reward-checker'); %>
+        <% } else if (data.type === "csv-download") { %>
+            <%- include('../page/csv-download'); %>
         <% } %>
     </div>
 </body>

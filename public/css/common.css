@@ -106,6 +106,25 @@ header nav ul li a:active {
     z-index: 10;
 }
 
+#layer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#layer div {
+    margin: auto;
+    color: #fff;
+    font-size: 1.5rem;
+}
+
 .content-title {
     position: relative;
     font-family: 'Orbitron';
