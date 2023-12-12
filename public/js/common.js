@@ -46,7 +46,7 @@ const getRewardsAssigned = async(address, from, to, offset, limit) => {
             }
         }
         if (json.data && json.meta.count + json.meta.offset < json.meta.total) {
-            const rewardsAssignedInfo2 = await getRewardsAssigned(address, offset + limit, limit);
+            const rewardsAssignedInfo2 = await getRewardsAssigned(address, from, to, offset + limit, limit);
             rewardsAssignedInfo = rewardsAssignedInfo1.concat(rewardsAssignedInfo2);
         } else {
             rewardsAssignedInfo = rewardsAssignedInfo1;
