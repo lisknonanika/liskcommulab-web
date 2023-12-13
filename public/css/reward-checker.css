@@ -37,7 +37,7 @@
 }
 
 .reward-list .content-main {
-    background-image: url("../image/lisk-Treasure.png");
+    background-image: url("../image/lisk-Robot.png");
 }
 
 #calculate-exp input {
@@ -75,7 +75,7 @@
 }
 
 .reward-history .content-main {
-    background-image: url("../image/lisk-Notebook.png");
+    background-image: url("../image/lisk-Treasure.png");
 }
 
 #history-form input {

@@ -1,7 +1,7 @@
 <div id="csv-download">
     <div class="csv-download-area">
         <div class="content-title">
-            <i class="fas fa-coins"></i>&nbsp;CSV Download
+            <i class="fas fa-file-csv"></i>&nbsp;CSV Download
             <span class="open-close"><i class="far fa-square-minus"></i></span>
         </div>
         <div class="content-description">CSVファイルのダウンロード</div>
@@ -30,7 +30,7 @@
                     <div class="checkbox" id="stakingReward"><i class="far fa-square-check"></i>出力する</div>
                     <div>ブロック生成報酬を出力する場合はチェック(バリデータのみ)</div>
                     <div class="checkbox" id="generateBlock"><i class="far fa-square"></i>出力する</div>
-                    <div class="center-button"><button type="button" id="download">CSV出力</button></div>
+                    <div class="center-button"><button type="button" id="download"><i class="fas fa-file-arrow-down"></i>&nbsp;ダウンロード</button></div>
                     <input type="checkbox" id="h-sendTx" checked="true" style="display: none;">
                     <input type="checkbox" id="h-receiveTx" checked="true" style="display: none;">
                     <input type="checkbox" id="h-stakingReward" checked="true" style="display: none;">
@@ -78,15 +78,18 @@
                 for await(const d of data) {
                     Info1.push({
                         id: d.id,
-                        type: d.moduleCommand,
+                        dataType: "Transaction",
+                        type: "Send",
+                        command: d.moduleCommand,
+                        executionStatus: d.executionStatus,
                         senderAddress: d.sender.address,
-                        recipientAddress: d.moduleCommand === "token:transfer" ? d.params.recipientAddress : "",
-                        tokenID: d.moduleCommand === "token:transfer" ? d.params.tokenID : "0000000000000000",
-                        amount: d.moduleCommand === "token:transfer" ? +d.params.amount / 100000000 * -1 : 0,
+                        recipientAddress: d.moduleCommand === (d.params && d.params.recipientAddress) ? d.params.recipientAddress : "",
+                        tokenID: d.moduleCommand === (d.params && d.params.tokenID)  ? d.params.tokenID : "0000000000000000",
+                        amount: d.moduleCommand === (d.params && d.params.amount && d.executionStatus !== "failed")  ? +d.params.amount / 100000000 * -1 : 0,
                         fee: +d.fee / 100000000,
                         timestamp: d.block.timestamp,
                         height: d.block.height,
-                        remark: "Send",
+                        remark: "",
                         order: 1
                     });
                 }
@@ -121,15 +124,18 @@
                 for await(const d of data) {
                     receiveTx1.push({
                         id: d.id,
-                        type: d.moduleCommand,
+                        dataType: "Transaction",
+                        type: "Receive",
+                        command: d.moduleCommand,
+                        executionStatus: d.executionStatus,
                         senderAddress: d.sender.address,
-                        recipientAddress: d.moduleCommand === "token:transfer" ? d.params.recipientAddress : "",
-                        tokenID: d.moduleCommand === "token:transfer" ? d.params.tokenID : "0000000000000000",
-                        amount: d.moduleCommand === "token:transfer" ? +d.params.amount / 100000000 : 0,
+                        recipientAddress: d.moduleCommand === (d.params && d.params.recipientAddress) ? d.params.recipientAddress : "",
+                        tokenID: d.moduleCommand === (d.params && d.params.tokenID)  ? d.params.tokenID : "0000000000000000",
+                        amount: d.moduleCommand === (d.params && d.params.amount && d.executionStatus !== "failed")  ? +d.params.amount / 100000000 : 0,
                         fee: 0,
                         timestamp: d.block.timestamp,
                         height: d.block.height,
-                        remark: "Receive",
+                        remark: "",
                         order: 0
                     });
                 }
@@ -168,7 +174,10 @@
                     if (isOutputMint && d.module === "token" && d.name === "mint" && d.topics.includes("03")) {
                         eventInfo1.push({
                             id: d.id,
-                            type: `${d.module}:${d.name}`,
+                            dataType: "Event",
+                            type: "Receive",
+                            command: `${d.module}:${d.name}`,
+                            executionStatus: "successful",
                             senderAddress: "",
                             recipientAddress: d.data.address,
                             tokenID: d.data.tokenID,
@@ -176,14 +185,17 @@
                             fee: 0,
                             timestamp: d.block.timestamp,
                             height: d.block.height,
-                            remark: "Receive",
+                            remark: "Generate Block Reward",
                             order: 3
                         });
                     }
                     else if (isOutputMint && d.module === "token" && d.name === "lock" && d.data.module === "pos" && d.topics.includes("03")) {
                         eventInfo1.push({
                             id: d.id,
-                            type: `${d.module}:${d.name}`,
+                            dataType: "Event",
+                            type: "Lock",
+                            command: `${d.module}:${d.name}`,
+                            executionStatus: "successful",
                             senderAddress: d.data.address,
                             recipientAddress: "",
                             tokenID: d.data.tokenID,
@@ -191,14 +203,17 @@
                             fee: 0,
                             timestamp: d.block.timestamp,
                             height: d.block.height,
-                            remark: "Lock",
+                            remark: "Sharing Reward",
                             order: 4
                         });
                     }
                     else if (isOutputReward && d.module === "pos" && d.name === "rewardsAssigned") {
                         eventInfo1.push({
                             id: d.id,
-                            type: `${d.module}:${d.name}`,
+                            dataType: "Event",
+                            type: "Receive",
+                            command: `${d.module}:${d.name}`,
+                            executionStatus: "successful",
                             senderAddress: d.data.validatorAddress,
                             recipientAddress: d.data.stakerAddress,
                             tokenID: d.data.tokenID,
@@ -206,7 +221,7 @@
                             fee: 0,
                             timestamp: d.block.timestamp,
                             height: d.block.height,
-                            remark: "Receive",
+                            remark: "Staking Reward",
                             order: 2
                         });
                     }
@@ -243,6 +258,7 @@
             if (document.querySelector("#h-sendTx").checked) {
                 console.log("-- getSendInfo start ----------");
                 sendInfo = await getSendInfo(address, fromTime, toTime, 0, 100, 0);
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 console.log(sendInfo);
                 console.log("-- getSendInfo end ----------");
             }
@@ -250,6 +266,7 @@
             if (document.querySelector("#h-receiveTx").checked) {
                 console.log("-- getReceiveInfo start ----------");
                 receiveInfo = await getReceiveInfo(address, fromTime, toTime, 0, 100, 0);
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 console.log(receiveInfo);
                 console.log("-- getReceiveInfo end ----------");
             }
@@ -257,6 +274,7 @@
             if (document.querySelector("#h-stakingReward").checked || document.querySelector("#h-generateBlock").checked) {
                 console.log("-- getEventInfo start ----------");
                 eventInfo = await getEventInfo(address, fromTime, toTime, 0, 100, 0);
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 console.log(eventInfo);
                 console.log("-- getEventInfo end ----------");
             }
@@ -268,16 +286,46 @@
             console.log("-- summary end ----------");
             
             console.log("-- csv download start ----------");
-            let csvData = `"id","type","sender","recipient","tokenID","amount","fee","date","timestamp","height","remark"\r\n`;
+            let csvData =
+                `"ID",` +
+                `"DataType",` +
+                `"Type",` +
+                `"Command",` +
+                `"Status",` +
+                `"Sender",` +
+                `"Recipient",` +
+                `"TokenID",` +
+                `"Amount",` +
+                `"Fee",` +
+                `"Date",` +
+                `"Timestamp",` +
+                `"Height",` +
+                `"Remark"` +
+                `\r\n`;
             for await(const d of summaryInfo) {
                 const dt = new Date(d.timestamp * 1000);
-                csvData += `"${d.id}","${d.type}","${d.senderAddress}","${d.recipientAddress}","${d.tokenID}","${d.amount}","${d.fee}","${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}","${d.timestamp}","${d.height}","${d.remark}"\r\n`;
+                csvData +=
+                    `"${d.id}",` +
+                    `"${d.dataType}",` +
+                    `"${d.type}",` +
+                    `"${d.command}",` +
+                    `"${d.executionStatus}",` +
+                    `"${d.senderAddress}",` +
+                    `"${d.recipientAddress}",` +
+                    `"${d.tokenID}",` +
+                    `"${d.amount}",` +
+                    `"${d.fee}",` +
+                    `"${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}",` +
+                    `"${d.timestamp}",` +
+                    `"${d.height}",` +
+                    `"${d.remark}"` +
+                    `\r\n`;
             }
             
             const blob = new Blob([csvData],{type: "text/csv"});
             const downloadLink = document.createElement("a");
             downloadLink.href = URL.createObjectURL(blob);
-            downloadLink.download =`transaction_${address}_${fromTime}_${toTime}.csv`;
+            downloadLink.download =`${address}_${fromTime}_${toTime}.csv`;
             downloadLink.click();
             downloadLink.remove();
             console.log("-- csv download end ----------");
