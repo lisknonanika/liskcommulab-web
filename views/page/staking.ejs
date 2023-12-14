@@ -90,7 +90,7 @@
         const getValidatorInfo = async() => {
             const data = await getMyAccount();
             stakingRate = 100.00 - (+data.commission / 100);
-            stakingReward = Math.floor(blockReward * (stakingRate / 100) * Math.pow(10, 8)) / Math.pow(10, 8);
+            stakingReward = Math.floor(blockReward * (stakingRate / 100) * 100000000) / 100000000;
             selfStake = +data.selfStake / 100000000;
             totalStake = +data.totalStake / 100000000;
             validatorWeight = +data.validatorWeight / 100000000;
@@ -107,16 +107,16 @@
             const total = +totalStake + vote;
             const block = blockReward;
             const rate = stakingRate / 100;
-            const result = Math.floor(((vote / total) * (block * rate)) * Math.pow(10, 8)) / Math.pow(10, 8);
+            const result = Math.floor(((vote / total) * (block * rate)) * 100000000) / 100000000;
 
             document.querySelector("#calculate-data").innerHTML = `<div class="title">ステーキング報酬</div>`; 
             document.querySelector("#calculate-data").innerHTML +=
                 `<ul>` +
                 `<li><span class="title">1ブロックあたり：</span><span>${result}LSK</span>` +
-                `<li><span class="title">1日あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</span></li>` +
-                `<li><span class="title">1週間あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 7) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</span></li>` +
-                `<li><span class="title">1ヵ月あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 30) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</span></li>` +
-                `<li><span class="title">1年あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 365) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</span></li>` +
+                `<li><span class="title">1日あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK) * 100000000) / 100000000}LSK</span></li>` +
+                `<li><span class="title">1週間あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 7) * 100000000) / 100000000}LSK</span></li>` +
+                `<li><span class="title">1ヵ月あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 30) * 100000000) / 100000000}LSK</span></li>` +
+                `<li><span class="title">1年あたり：</span><span>${Math.floor((result * DAILY_GENERATE_BLOCK * 365) * 100000000) / 100000000}LSK</span></li>` +
                 `</ul>`;
             document.querySelector("#calculate-data").innerHTML += `<div class="title" style="margin-top: 10px;">以下で計算しています。</div>`; 
             document.querySelector("#calculate-data").innerHTML += 

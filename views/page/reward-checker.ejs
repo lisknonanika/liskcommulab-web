@@ -7,7 +7,6 @@
         <div class="content-description">バリデータのステーキング報酬関連情報</div>
         <div class="content-main left">
             <div class="content open">
-                <div style="color: rgb(190, 42, 42);">現在、移行期間中です。移行期間終了後に動的報酬に変わります。</div>
                 <div id="validator-info">取得中です。</div>
             </div>
         </div>
@@ -83,7 +82,7 @@
                 const total = +v.totalStake + vote;
                 const block = v.blockReward;
                 const rate = v.stakingRate / 100;
-                const reward = Math.floor(((vote / total) * (block * rate)) * Math.pow(10, 8)) / Math.pow(10, 8);
+                const reward = Math.floor(((vote / total) * (block * rate)) * 100000000) / 100000000;
                 calcExpValueList.push({
                     "address": v.address,
                     "name": v.name, 
@@ -98,10 +97,10 @@
                         `<div class="title"><a href="https://liskscan.com/account/${v.address}" target="_blank" rel="noopener noreferrer">${v.name}</a></div>` +
                         `<ul>` +
                         `<li><span class="title">1ブロックあたり：</span>${v.reward}LSK</li>` +
-                        `<li><span class="title">1日あたり：</span>${Math.floor((v.reward * DAILY_GENERATE_BLOCK) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</li>` +
-                        `<li><span class="title">1週間あたり：</span>${Math.floor((v.reward * DAILY_GENERATE_BLOCK * 7) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</li>` +
-                        `<li><span class="title">1ヵ月あたり：</span>${Math.floor((v.reward * DAILY_GENERATE_BLOCK * 30) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</li>` +
-                        `<li><span class="title">1年あたり：</span>${Math.floor((v.reward * DAILY_GENERATE_BLOCK * 365) * Math.pow(10, 8)) / Math.pow(10, 8)}LSK</li>` +
+                        `<li><span class="title">1日あたり：</span>${Math.floor((v.reward * DAILY_GENERATE_BLOCK) * 100000000) / 100000000}LSK</li>` +
+                        `<li><span class="title">1週間あたり：</span>${Math.floor((v.reward * DAILY_GENERATE_BLOCK * 7) * 100000000) / 100000000}LSK</li>` +
+                        `<li><span class="title">1ヵ月あたり：</span>${Math.floor((v.reward * DAILY_GENERATE_BLOCK * 30) * 100000000) / 100000000}LSK</li>` +
+                        `<li><span class="title">1年あたり：</span>${Math.floor((v.reward * DAILY_GENERATE_BLOCK * 365) * 100000000) / 100000000}LSK</li>` +
                         `</ul>`;
             }
             document.querySelector("#calculate-data").innerHTML = `${validatorInfoHtml}`;
@@ -180,7 +179,7 @@
 
                 const bftWeight = +bFTParameter.bftWeight;
                 const commission = +validator.commission / 100;
-                const blockReward = height > 23461753 ? Math.floor((0.1 + (bftWeight * 90.9) / totalBftWeight) * 100000000) / 100000000 : 1;
+                const blockReward = Math.floor((0.1 + (bftWeight * 90.9) / totalBftWeight) * 100000000) / 100000000;
                 const stakingRate = 100 - commission;
                 const stakingReward = Math.floor(blockReward * (stakingRate / 100) * 100000000) / 100000000;
                 const validatorWeight = +validator.validatorWeight / 100000000;
