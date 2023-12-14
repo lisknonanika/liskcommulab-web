@@ -130,7 +130,7 @@
         }
 
         (async() => {
-            document.querySelector("#calculate-exp input").addEventListener("input", (event) => calcExpValue(event.target.value));
+            document.querySelector("#calculate-exp input").addEventListener("input", async(event) => await calcExpValue(event.target.value));
             await getMyReward();
             await getValidatorInfo();
             document.querySelector("#staking-rate").innerHTML = `${stakingRate}%`;

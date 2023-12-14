@@ -154,8 +154,8 @@
         }
 
         (async() => {
-            document.querySelector("#calculate-exp input").addEventListener("input", (event) => calcExpValue(event.target.value));
-            document.querySelector("#history-form button").addEventListener("click", (event) => getRewardHistory());
+            document.querySelector("#calculate-exp input").addEventListener("input", async(event) => await calcExpValue(event.target.value));
+            document.querySelector("#history-form button").addEventListener("click", async(event) => await getRewardHistory());
 
             document.querySelector("#fromDate").value = getYMD(-7);
             document.querySelector("#toDate").value = getYMD();
@@ -164,12 +164,15 @@
             const height = await getCurrentHeight();
             const validators = await getValidators();
             const bFTParameters = await getBFTParameters(height);
+            if (!validators || validators.length === 0 || !bFTParameters || !bFTParameters.validators || bFTParameters.validators.length === 0) {
+                document.querySelector("#validator-info").innerHTML = `データが取得できませんでした。`;
+                return;
+            }
             const totalBftWeight = bFTParameters.validators.reduce((sum, d) => { return sum + +d.bftWeight}, 0);
 
             for await (const validator of validators) {
-                if (validator.status.toLowerCase() !== "active") continue;
                 const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
-                if (bFTParameter === undefined) continue;
+                if (!bFTParameter) continue;
 
                 const bftWeight = +bFTParameter.bftWeight;
                 const commission = +validator.commission / 100;
