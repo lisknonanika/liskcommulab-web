@@ -160,16 +160,25 @@
             document.querySelector("#fromDate").value = getYMD(-7);
             document.querySelector("#toDate").value = getYMD();
             
-            validatorsList = [];
-            const height = await getCurrentHeight();
             const validators = await getValidators();
-            const bFTParameters = await getBFTParameters(height);
-            if (!validators || validators.length === 0 || !bFTParameters || !bFTParameters.validators || bFTParameters.validators.length === 0) {
+            if (!validators || validators.length === 0) {
+                document.querySelector("#validator-info").innerHTML = `データが取得できませんでした。`;
+                return;
+            }
+
+            const height = await getCurrentHeight();
+            let bFTParameters = [];
+            for (let i = 0; i < 10; i++) {
+                bFTParameters = await getBFTParameters(height);
+                if (bFTParameters && bFTParameters.validators) break;
+            }
+            if (!bFTParameters || !bFTParameters.validators || bFTParameters.validators.length === 0) {
                 document.querySelector("#validator-info").innerHTML = `データが取得できませんでした。`;
                 return;
             }
             const totalBftWeight = bFTParameters.validators.reduce((sum, d) => { return sum + +d.bftWeight}, 0);
 
+            validatorsList = [];
             for await (const validator of validators) {
                 const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
                 if (!bFTParameter) continue;
