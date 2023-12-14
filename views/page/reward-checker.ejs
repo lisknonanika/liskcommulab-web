@@ -164,13 +164,7 @@
             const height = await getCurrentHeight();
             const validators = await getValidators();
             const bFTParameters = await getBFTParameters(height);
-            
-            let totalBftWeight = 0;
-            for await (const validator of validators) {
-                if (validator.status.toLowerCase() !== "active") continue;
-                const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
-                if (bFTParameter !== undefined) totalBftWeight += +bFTParameter.bftWeight;
-            }
+            const totalBftWeight = bFTParameters.validators.reduce((sum, d) => { return sum + +d.bftWeight}, 0);
 
             for await (const validator of validators) {
                 if (validator.status.toLowerCase() !== "active") continue;
