@@ -22,7 +22,7 @@ const getMyReward = async() => {
 }
 
 const getValidators = async() => {
-    const ret = await fetch(`https://${SERVICE_URL}/api/v3/pos/validators?sort=rank:asc&limit=101`);
+    const ret = await fetch(`https://${SERVICE_URL}/api/v3/pos/validators?status=active&sort=rank:asc&limit=101`);
     const json = await ret.json();
     return json.data;
 }
