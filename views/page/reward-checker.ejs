@@ -107,6 +107,56 @@
             document.querySelector("#calculate-data").style.display = "block";
         }
 
+        const getValidatorList = async() => {
+            const validators = await getValidators();
+            if (!validators || validators.length === 0) {
+                document.querySelector("#validator-info").innerHTML = `データが取得できませんでした。`;
+                return;
+            }
+
+            const tortalWeight = validators.reduce((sum, d) => { return sum + (+d.validatorWeight / 100000000) }, 0);
+
+            validatorsList = [];
+            for await (const validator of validators) {
+                const validatorWeight = +validator.validatorWeight / 100000000;
+                const commission = +validator.commission / 100;
+                const blockReward = Math.floor((0.1 + (validatorWeight / tortalWeight) * 90.9) * 100000000) / 100000000;
+                const stakingRate = 100 - commission;
+                const stakingReward = Math.floor(blockReward * (stakingRate / 100) * 100000000) / 100000000;
+                const totalStake = +validator.totalStake / 100000000;
+                
+                validatorsList.push({
+                    rank: validator.rank,
+                    name: validator.name,
+                    address: validator.address,
+                    commission: commission,
+                    blockReward: blockReward,
+                    stakingRate: stakingRate,
+                    stakingReward: stakingReward,
+                    validatorWeight: validatorWeight,
+                    totalStake: totalStake
+                });
+            }
+
+            if (validatorsList.length === 0) return;
+
+            let validatorInfoHtml = "";
+            for await (const v of validatorsList) {
+                validatorInfoHtml +=
+                    `<div class="title"><a href="https://liskscan.com/account/${v.address}" target="_blank" rel="noopener noreferrer">${v.name}</a></div>` +
+                    `<ul>` +
+                    `<li><span class="title">ランク：</span>${v.rank}</li>` +
+                    `<li><span class="title">報酬割合：</span>${v.stakingRate}%</li>` +
+                    `<li><span class="title">ブロック報酬：</span>${v.blockReward}LSK</li>` +
+                    `<li><span class="title">ステーキング報酬：</span>${v.stakingReward}LSK</li>` +
+                    `<li><span class="title">得票数：</span>${v.totalStake}</li>` +
+                    `<li><span class="title">重み：</span>${v.validatorWeight}</li>` +
+                    `</ul>`;
+            }
+            document.querySelector("#validator-info").innerHTML = `${validatorInfoHtml}`;
+            document.querySelector("#validator-info").classList.add("hasData");
+        }
+
         const getRewardHistory = async() => {
             const address = document.querySelector("#address").value;
             const fromDate = document.querySelector("#fromDate").value;
@@ -160,73 +210,7 @@
             document.querySelector("#fromDate").value = getYMD(-7);
             document.querySelector("#toDate").value = getYMD();
             
-            const validators = await getValidators();
-            if (!validators || validators.length === 0) {
-                document.querySelector("#validator-info").innerHTML = `データが取得できませんでした。`;
-                return;
-            }
-
-            const height = await getCurrentHeight();
-            let bFTParameters = [];
-            for (let i = 0; i < 10; i++) {
-                bFTParameters = await getBFTParameters(height);
-                if (bFTParameters && bFTParameters.validators) break;
-            }
-            if (!bFTParameters || !bFTParameters.validators || bFTParameters.validators.length === 0) {
-                document.querySelector("#validator-info").innerHTML = `データが取得できませんでした。`;
-                return;
-            }
-            
-            let totalBftWeight = 0;
-            for await (const validator of validators) {
-                const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
-                if (!bFTParameter) continue;
-                totalBftWeight += +bFTParameter.bftWeight;
-            }
-
-            validatorsList = [];
-            for await (const validator of validators) {
-                const bFTParameter = bFTParameters.validators.find((d) => d.address === validator.address);
-                if (!bFTParameter) continue;
-
-                const bftWeight = +bFTParameter.bftWeight;
-                const commission = +validator.commission / 100;
-                const blockReward = Math.floor((0.1 + (bftWeight * (validators.length - (validators.length * 0.1))) / totalBftWeight) * 100000000) / 100000000;
-                const stakingRate = 100 - commission;
-                const stakingReward = Math.floor(blockReward * (stakingRate / 100) * 100000000) / 100000000;
-                const validatorWeight = +validator.validatorWeight / 100000000;
-                const totalStake = +validator.totalStake / 100000000;
-                
-                validatorsList.push({
-                    rank: validator.rank,
-                    name: validator.name,
-                    address: validator.address,
-                    commission: commission,
-                    blockReward: blockReward,
-                    stakingRate: stakingRate,
-                    stakingReward: stakingReward,
-                    bftWeight: bftWeight,
-                    validatorWeight: validatorWeight,
-                    totalStake: totalStake
-                });
-            }
-
-            if (validatorsList.length === 0) return;
-
-            let validatorInfoHtml = "";
-            for await (const v of validatorsList) {
-                validatorInfoHtml +=
-                    `<div class="title"><a href="https://liskscan.com/account/${v.address}" target="_blank" rel="noopener noreferrer">${v.name}</a></div>` +
-                    `<ul>` +
-                    `<li><span class="title">ランク：</span>${v.rank}</li>` +
-                    `<li><span class="title">報酬割合：</span>${v.stakingRate}%</li>` +
-                    `<li><span class="title">ブロック報酬：</span>${v.blockReward}LSK</li>` +
-                    `<li><span class="title">ステーキング報酬：</span>${v.stakingReward}LSK</li>` +
-                    `<li><span class="title">得票数：</span>${v.totalStake}</li>` +
-                    `</ul>`;
-            }
-            document.querySelector("#validator-info").innerHTML = `${validatorInfoHtml}`;
-            document.querySelector("#validator-info").classList.add("hasData");
+            await getValidatorList();
         })();
     </script>
 </div>
