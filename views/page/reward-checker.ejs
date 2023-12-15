@@ -109,18 +109,71 @@
 
         const getValidatorList = async() => {
             const validators = await getValidators();
-            if (!validators || validators.length === 0) {
+            if (!validators || validators.length < 101) {
                 document.querySelector("#validator-info").innerHTML = `データが取得できませんでした。`;
                 return;
             }
-
-            const tortalWeight = validators.reduce((sum, d) => { return sum + (+d.validatorWeight / 100000000) }, 0);
+            let i = 0;
+            const expRewards = await Promise.all([
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
+                getExpRewards(validators[i++].address)
+            ]);
 
             validatorsList = [];
             for await (const validator of validators) {
+                const expReward = expRewards.find((d) => validator.address === d.meta.params.validatorAddress);
                 const validatorWeight = +validator.validatorWeight / 100000000;
                 const commission = +validator.commission / 100;
-                const blockReward = Math.floor((0.1 + (validatorWeight / tortalWeight) * 90.9) * 100000000) / 100000000;
+                const blockReward = +expReward.data.blockReward / 100000000;
                 const stakingRate = 100 - commission;
                 const stakingReward = Math.floor(blockReward * (stakingRate / 100) * 100000000) / 100000000;
                 const totalStake = +validator.totalStake / 100000000;

@@ -57,11 +57,11 @@ const getRewardsAssigned = async(address, from, to, offset, limit) => {
     }
 }
 
-const getBFTParameters = async(height) => {
+const getExpRewards = async(address) => {
     const body = {
-        "endpoint": "consensus_getBFTParameters",
+        "endpoint": "dynamicReward_getExpectedValidatorRewards",
         "params": {
-            "height": height
+            "validatorAddress": address
         }
     }
     const ret = await fetch(`https://${SERVICE_URL}/api/v3/invoke`, {
@@ -71,8 +71,7 @@ const getBFTParameters = async(height) => {
         },
         body: JSON.stringify(body)
     });
-    const json = await ret.json();
-    return json.data;
+    return await ret.json();
 }
 
 const getYMD = (days) => {
