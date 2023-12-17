@@ -153,10 +153,10 @@
             }
         }
 
-        const getEventInfo = async(address, from, to, offset, limit, total) => {
+        const getStakingRewardInfo = async(address, from, to, offset, limit, total) => {
             try {
                 console.log(offset);
-                const layerHtml = `イベントデータを抽出しています...`;
+                const layerHtml = `ステーキング報酬を抽出しています...`;
                 document.querySelector("#layer").innerHTML = `<div>${layerHtml} (${offset} / ${total})</div>`;
                 if (offset > 0 && offset % (limit * 10) === 0) await new Promise(resolve => setTimeout(resolve, 5000));
 
@@ -171,43 +171,7 @@
                 
                 const eventInfo1 = [];
                 for await(const d of data) {
-                    if (isOutputMint && d.module === "token" && d.name === "mint" && d.topics.includes("03")) {
-                        eventInfo1.push({
-                            id: d.id,
-                            dataType: "Event",
-                            type: "Receive",
-                            command: `${d.module}:${d.name}`,
-                            executionStatus: "successful",
-                            senderAddress: "",
-                            recipientAddress: d.data.address,
-                            tokenID: d.data.tokenID,
-                            amount: +d.data.amount / 100000000,
-                            fee: 0,
-                            timestamp: d.block.timestamp,
-                            height: d.block.height,
-                            remark: "Generate Block Reward",
-                            order: 3
-                        });
-                    }
-                    else if (isOutputMint && d.module === "token" && d.name === "lock" && d.data.module === "pos" && d.topics.includes("03")) {
-                        eventInfo1.push({
-                            id: d.id,
-                            dataType: "Event",
-                            type: "Lock",
-                            command: `${d.module}:${d.name}`,
-                            executionStatus: "successful",
-                            senderAddress: d.data.address,
-                            recipientAddress: "",
-                            tokenID: d.data.tokenID,
-                            amount: +d.data.amount / 100000000 * -1,
-                            fee: 0,
-                            timestamp: d.block.timestamp,
-                            height: d.block.height,
-                            remark: "Sharing Reward",
-                            order: 4
-                        });
-                    }
-                    else if (isOutputReward && d.module === "pos" && d.name === "rewardsAssigned") {
+                    if (isOutputReward && d.module === "pos" && d.name === "rewardsAssigned") {
                         eventInfo1.push({
                             id: d.id,
                             dataType: "Event",
@@ -229,12 +193,69 @@
                 document.querySelector("#layer").innerHTML = `<div>${layerHtml} (${+offset + data.length} / ${json.meta.total})</div>`;
                     
                 if (json.meta.count + json.meta.offset < json.meta.total) {
-                    const eventInfo2 = await getEventInfo(address, from, to, offset + limit, limit, json.meta.total);
+                    const eventInfo2 = await getStakingRewardInfo(address, from, to, offset + limit, limit, json.meta.total);
                     eventInfo = eventInfo1.concat(eventInfo2);
                 } else {
                     eventInfo = eventInfo1;
                 }
                 return eventInfo.reverse();
+            } catch(err) {
+                return err;
+            }
+        }
+
+        const getGenerateBlockHeights = async(address, from, to, offset, limit, total) => {
+            try {
+                console.log(offset);
+                const layerHtml = `ブロック生成情報を抽出しています...`;
+                document.querySelector("#layer").innerHTML = `<div>${layerHtml} (${offset} / ${total})</div>`;
+                if (offset > 0 && offset % (limit * 10) === 0) await new Promise(resolve => setTimeout(resolve, 5000));
+
+                const isOutputMint = document.querySelector("#h-generateBlock").checked;
+                const isOutputReward = document.querySelector("#h-stakingReward").checked
+                
+                let blockInfo = [];
+                const ret = await fetch(`https://${SERVICE_URL2}/api/v3/blocks?generatorAddress=${address}&timestamp=${from}:${to}&offset=${offset}&limit=${limit}`);
+                const json = await ret.json();
+                const data = json.data;
+                if (!data) return [];
+                
+                const blockInfo1 = [];
+                for await(const d of data) {
+                    blockInfo1.push(d.height);
+                }
+                document.querySelector("#layer").innerHTML = `<div>${layerHtml} (${+offset + data.length} / ${json.meta.total})</div>`;
+                    
+                if (json.meta.count + json.meta.offset < json.meta.total) {
+                    const blockInfo2 = await getGenerateBlockHeights(address, from, to, offset + limit, limit, json.meta.total);
+                    blockInfo = blockInfo1.concat(blockInfo2);
+                } else {
+                    blockInfo = blockInfo1;
+                }
+                return blockInfo;
+            } catch(err) {
+                return err;
+            }
+        }
+
+        const getGenerateBlockInfo = async(address, blockHeights) => {
+            const blockRewardInfo = [];
+            try {
+                let workerEndCnt = 0;
+                const layerHtml = `ブロック生成イベントを抽出しています...`;
+                document.querySelector("#layer").innerHTML = `<div>${layerHtml} (0 / ${blockHeights.length})</div>`;
+                return new Promise(resolve => {
+                    for (const height of blockHeights) {
+                        const worker = new Worker("../js/worker.js");
+                        worker.addEventListener('message', (e) => {
+                            for (data of e.data) blockRewardInfo.push(data);
+                            workerEndCnt += 1;
+                            document.querySelector("#layer").innerHTML = `<div>${layerHtml} (${workerEndCnt} / ${blockHeights.length})</div>`;
+                            if (blockHeights.length === workerEndCnt) return resolve(blockRewardInfo);
+                        }, false);
+                        worker.postMessage({"url":SERVICE_URL, "address":address, "height":height, "offset":0, "limit":100});
+                    }
+                });
             } catch(err) {
                 return err;
             }
@@ -253,7 +274,9 @@
             
             let sendInfo = [];
             let receiveInfo = [];
-            let eventInfo = [];
+            let stakingRewardInfo = [];
+            let blockHeights = [];
+            let blockRewardInfo = [];
 
             if (document.querySelector("#h-sendTx").checked) {
                 console.log("-- getSendInfo start ----------");
@@ -271,16 +294,31 @@
                 console.log("-- getReceiveInfo end ----------");
             }
 
-            if (document.querySelector("#h-stakingReward").checked || document.querySelector("#h-generateBlock").checked) {
-                console.log("-- getEventInfo start ----------");
-                eventInfo = await getEventInfo(address, fromTime, toTime, 0, 100, 0);
+            if (document.querySelector("#h-stakingReward").checked) {
+                console.log("-- getStakingRewardInfo start ----------");
+                stakingRewardInfo = await getStakingRewardInfo(address, fromTime, toTime, 0, 100, 0);
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                console.log(eventInfo);
-                console.log("-- getEventInfo end ----------");
+                console.log(stakingRewardInfo);
+                console.log("-- getStakingRewardInfo end ----------");
+            }
+
+            if (document.querySelector("#h-generateBlock").checked) {
+                console.log("-- getGenerateBlockHeights start ----------");
+                blockHeights = await getGenerateBlockHeights(address, fromTime, toTime, 0, 100, 0);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                console.log(blockHeights);
+                console.log("-- getGenerateBlockHeights end ----------");
+
+                if (blockHeights.length > 0) {
+                    console.log("-- getGenerateBlockInfo start ----------");
+                    blockRewardInfo = await getGenerateBlockInfo(address, blockHeights);
+                    console.log(blockRewardInfo);
+                    console.log("-- getGenerateBlockInfo end ----------");
+                }
             }
             
             console.log("-- summary start ----------");
-            const summaryInfo = sendInfo.concat(receiveInfo.concat(eventInfo));
+            const summaryInfo = sendInfo.concat(receiveInfo.concat(stakingRewardInfo.concat(blockRewardInfo)));
             summaryInfo.sort((a, b) => +(a.timestamp.toString() + a.order.toString()) - +(b.timestamp.toString() + b.order.toString()));
             console.log(summaryInfo);
             console.log("-- summary end ----------");

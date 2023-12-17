@@ -1,4 +1,5 @@
 const SERVICE_URL = "service.lisk.com";
+const SERVICE_URL2 = "mainnet-service.liskscan.com";
 const VALIDATOR_ADDRESS = "lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw";
 const DAILY_GENERATE_BLOCK = 24 * 60 * 60 / 10 / 103;
 
