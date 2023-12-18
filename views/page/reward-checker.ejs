@@ -107,66 +107,41 @@
             document.querySelector("#calculate-data").style.display = "block";
         }
 
+        const getExpRewardsInfo = async(validators) => {
+            const rewardInfo = [];
+            try {
+                let workerEndCnt = 0;
+                return new Promise(resolve => {
+                    for (const validator of validators) {
+                        const worker = new Worker("../js/reward-checker-worker.js");
+                        worker.addEventListener('message', (e) => {
+                            rewardInfo.push(e.data);
+                            workerEndCnt += 1;
+                            if (validators.length === workerEndCnt) return resolve(rewardInfo);
+                        }, false);
+                        worker.postMessage({"type":"getExpRewards", "url":SERVICE_URL, "address":validator.address});
+                    }
+                });
+            } catch(err) {
+                return err;
+            }
+        }
+
         const getValidatorList = async() => {
             const validators = await getValidators();
-            if (!validators || validators.length < 101) {
+            if (!validators || validators.length === 0) {
                 document.querySelector("#validator-info").innerHTML = `データが取得できませんでした。`;
                 return;
             }
-            let i = 0;
-            const expRewards = await Promise.all([
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address), getExpRewards(validators[i++].address),
-                getExpRewards(validators[i++].address)
-            ]);
+
+            let expRewards = [];
+            if (validators.length > 0) {
+                expRewards = await getExpRewardsInfo(validators);
+            }
+            if (!expRewards || expRewards.length === 0) {
+                document.querySelector("#validator-info").innerHTML = "データが取得できませんでした。";
+                return;
+            }
 
             validatorsList = [];
             for await (const validator of validators) {
@@ -210,6 +185,52 @@
             document.querySelector("#validator-info").classList.add("hasData");
         }
 
+        const getStakingRewardHeights = async(address, from, to, offset, limit) => {
+            try {
+                if (offset > 0 && offset % (limit * 10) === 0) await new Promise(resolve => setTimeout(resolve, 5000));
+                
+                let info = [];
+                const ret = await fetch(`https://${SERVICE_URL}/api/v3/transactions?senderAddress=${address}&moduleCommand=pos:claimRewards&timestamp=${from}:${to}&offset=${offset}&limit=${limit}`);
+                const json = await ret.json();
+                const data = json.data;
+                if (!data) return [];
+                
+                const info1 = [];
+                for await(const d of data) {
+                    info1.push(d.block.height);
+                }
+                if (json.meta.count + json.meta.offset < json.meta.total) {
+                    const info2 = await getGenerateBlockHeights(address, from, to, offset + limit, limit);
+                    info = info1.concat(info2);
+                } else {
+                    info = info1;
+                }
+                return info;
+            } catch(err) {
+                return err;
+            }
+        }
+
+        const getStakingRewardInfo = async(address, heights) => {
+            const rewardInfo = [];
+            try {
+                let workerEndCnt = 0;
+                return new Promise(resolve => {
+                    for (const height of heights) {
+                        const worker = new Worker("../js/reward-checker-worker.js");
+                        worker.addEventListener('message', (e) => {
+                            for (data of e.data) rewardInfo.push(data);
+                            workerEndCnt += 1;
+                            if (heights.length === workerEndCnt) return resolve(rewardInfo);
+                        }, false);
+                        worker.postMessage({"type":"getStakingReward", "url":SERVICE_URL, "address":address, "height":height, "offset":0, "limit":100});
+                    }
+                });
+            } catch(err) {
+                return err;
+            }
+        }
+
         const getRewardHistory = async() => {
             const address = document.querySelector("#address").value;
             const fromDate = document.querySelector("#fromDate").value;
@@ -222,9 +243,19 @@
 
             const fromTime = (new Date(`${fromDate} 00:00:00`)).getTime() / 1000;
             const toTime = (new Date(`${toDate} 23:59:59`)).getTime() / 1000;
-            const rewardsAssigned = await getRewardsAssigned(address, fromTime, toTime, 0, 100);
+            const heights = await getStakingRewardHeights(address, fromTime, toTime, 0, 100);
+            if (!heights || heights.length === 0) {
+                document.querySelector("#history-data").innerHTML = "データが取得できませんでした。";
+                document.querySelector("#history-data").style.display = "block";
+                return;
+            }
+
+            let rewardsAssigned = [];
+            if (heights.length > 0) {
+                rewardsAssigned = await getStakingRewardInfo(address, heights);
+            }
             if (!rewardsAssigned || rewardsAssigned.length === 0) {
-                document.querySelector("#history-data").innerHTML = "データがありません。";
+                document.querySelector("#history-data").innerHTML = "データが取得できませんでした。";
                 document.querySelector("#history-data").style.display = "block";
                 return;
             }

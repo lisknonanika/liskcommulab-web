@@ -28,53 +28,6 @@ const getValidators = async() => {
     return json.data;
 }
 
-const getRewardsAssigned = async(address, from, to, offset, limit) => {
-    try {
-        let rewardsAssignedInfo = [];
-        const rewardsAssignedInfo1 = [];
-        const ret = await fetch(`https://${SERVICE_URL}/api/v3/events?senderAddress=${address}&timestamp=${from}:${to}&offset=${offset}&limit=${limit}&sort=timestamp:asc`);
-        const json = await ret.json();
-        if (!json.data) return [];
-        const data = json.data.filter((d) => d.module === "pos" & d.name === "rewardsAssigned");
-        if (data !== undefined) {
-            for await(const d of data) {
-                rewardsAssignedInfo1.push({
-                    validatorAddress: d.data.validatorAddress,
-                    tokenID: d.data.tokenID,
-                    amount: d.data.amount,
-                    timestamp: d.block.timestamp
-                });
-            }
-        }
-        if (json.data && json.meta.count + json.meta.offset < json.meta.total) {
-            const rewardsAssignedInfo2 = await getRewardsAssigned(address, from, to, offset + limit, limit);
-            rewardsAssignedInfo = rewardsAssignedInfo1.concat(rewardsAssignedInfo2);
-        } else {
-            rewardsAssignedInfo = rewardsAssignedInfo1;
-        }
-        return rewardsAssignedInfo;
-    } catch(err) {
-        return err;
-    }
-}
-
-const getExpRewards = async(address) => {
-    const body = {
-        "endpoint": "dynamicReward_getExpectedValidatorRewards",
-        "params": {
-            "validatorAddress": address
-        }
-    }
-    const ret = await fetch(`https://${SERVICE_URL}/api/v3/invoke`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-    });
-    return await ret.json();
-}
-
 const getYMD = (days) => {
     const d = new Date();
     if (days !== undefined) d.setDate(d.getDate() + days);
