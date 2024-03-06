@@ -184,21 +184,28 @@
             }
         }
 
+        let errorStakingRewardHeights = [];
         const getStakingRewardInfo = async(address, heights) => {
+            errorStakingRewardHeights = [];
             const rewardInfo = [];
             try {
                 let workerEndCnt = 0;
                 const layerHtml = `報酬要求イベントを抽出しています...`;
                 document.querySelector("#layer").innerHTML = `<div>${layerHtml} (0 / ${heights.length})</div>`;
                 return new Promise(resolve => {
-                    for (const height of heights) {
-                        const worker = new Worker("../js/csv-download-worker.js");
-                        worker.addEventListener('message', (e) => {
-                            for (data of e.data) rewardInfo.push(data);
+                    const worker = new Worker("../js/csv-download-worker.js");
+                    worker.addEventListener('message', (e) => {
+                        try {
                             workerEndCnt += 1;
                             document.querySelector("#layer").innerHTML = `<div>${layerHtml} (${workerEndCnt} / ${heights.length})</div>`;
-                            if (heights.length === workerEndCnt) return resolve(rewardInfo);
-                        }, false);
+                            for (data of e.data) rewardInfo.push(data);
+                        } catch(err) {
+                            console.log(e.data);
+                            errorStakingRewardHeights.push(e.data.height);
+                        }
+                        if (heights.length === workerEndCnt) return resolve(rewardInfo);
+                    }, false);
+                    for (const height of heights) {
                         worker.postMessage({"type":"getStakingReward", "url":SERVICE_URL, "address":address, "height":height, "offset":0, "limit":100});
                     }
                 });
@@ -238,21 +245,28 @@
             }
         }
 
+        let errorBlockRewardHeights = [];
         const getBlockRewardInfo = async(address, heights) => {
+            errorBlockRewardHeights = [];
             const rewardInfo = [];
             try {
                 let workerEndCnt = 0;
                 const layerHtml = `ブロック生成イベントを抽出しています...`;
                 document.querySelector("#layer").innerHTML = `<div>${layerHtml} (0 / ${heights.length})</div>`;
                 return new Promise(resolve => {
-                    for (const height of heights) {
-                        const worker = new Worker("../js/csv-download-worker.js");
-                        worker.addEventListener('message', (e) => {
-                            for (data of e.data) rewardInfo.push(data);
+                    const worker = new Worker("../js/csv-download-worker.js");
+                    worker.addEventListener('message', (e) => {
+                        try {
                             workerEndCnt += 1;
                             document.querySelector("#layer").innerHTML = `<div>${layerHtml} (${workerEndCnt} / ${heights.length})</div>`;
-                            if (heights.length === workerEndCnt) return resolve(rewardInfo);
-                        }, false);
+                            for (data of e.data) rewardInfo.push(data);
+                        } catch(err) {
+                            console.log(e.data);
+                            errorBlockRewardHeights.push(e.data.height);
+                        }
+                        if (heights.length === workerEndCnt) return resolve(rewardInfo);
+                    }, false);
+                    for (const height of heights) {
                         worker.postMessage({"type":"getBlockReward", "url":SERVICE_URL, "address":address, "height":height, "offset":0, "limit":100});
                     }
                 });
@@ -305,6 +319,9 @@
                 if (stakingRewardHeights.length > 0) {
                     console.log("-- getStakingRewardInfo start ----------");
                     stakingRewardInfo = await getStakingRewardInfo(address, stakingRewardHeights);
+                    if (errorStakingRewardHeights.length > 0) {
+                        stakingRewardInfo = stakingRewardInfo.concat(await getStakingRewardInfo(address, errorStakingRewardHeights));
+                    }
                     console.log(stakingRewardInfo);
                     console.log("-- getStakingRewardInfo end ----------");
                 }
@@ -320,6 +337,9 @@
                 if (blockHeights.length > 0) {
                     console.log("-- getGenerateBlockInfo start ----------");
                     blockRewardInfo = await getBlockRewardInfo(address, blockHeights);
+                    if (errorBlockRewardHeights.length > 0) {
+                        blockRewardInfo = blockRewardInfo.concat(await getBlockRewardInfo(address, errorBlockRewardHeights));
+                    }
                     console.log(blockRewardInfo);
                     console.log("-- getGenerateBlockInfo end ----------");
                 }

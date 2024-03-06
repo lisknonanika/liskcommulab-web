@@ -50,7 +50,7 @@ const getStakingRewardInfoWorker = async(url, address, height, offset, limit) =>
         }
         return eventInfo;
     } catch(err) {
-        return err;
+        return { result:false, height:height };
     }
 }
 
@@ -110,6 +110,6 @@ const getBlockRewardInfoWorker = async(url, address, height, offset, limit) => {
         }
         return eventInfo;
     } catch(err) {
-        return err;
+        return { result:false, height:height };
     }
 }
