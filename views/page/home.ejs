@@ -46,30 +46,39 @@
         <div class="content-description">commulabからのお知らせ</div>
         <div class="content-main right">
             <div class="content open">
-                <div style="color: rgb(190, 42, 42);" class="title">Lisk公式アナウンス(ピックアップ)</div>
-                <div style="color: rgb(190, 42, 42);">
-                    <div>・L2 Testnetが稼働</div>
-                    <div style="padding-left: 20px;">詳しくは <a href="https://lisk.com/blog/posts/new-lisk-l2-testnet-live" target="_blank" rel="noopener noreferrer">こちら</a></div>
-                </div>
-                <div style="color: rgb(190, 42, 42);">
-                    <div>・インドネシア通信情報技術省との戦略的パートナーシップを発表</div>
-                    <div style="padding-left: 20px;">詳しくは <a href="https://decrypt.co/219203/lisk-announces-strategic-partnership-with-the-indonesian-ministry-of-communications-and-informatics-to-support-local-web3-startups" target="_blank" rel="noopener noreferrer">こちら</a></div>
+                <div class="title">Lisk公式アナウンス(ピックアップ)</div>
+                <div>
+                    <ul>
+                        <li style="color: rgb(190, 42, 42);">
+                            <div>スナップショットの高さ決定</div>
+                            <div>詳しくは <a href="https://lisk.com/blog/posts/lsk-token-migration-snapshot-height-announcement" target="_blank" rel="noopener noreferrer">こちら</a></div>
+                            <div>おおよその予定日時は以下の通りです。</div>
+                            <div>
+                                <ul>
+                                    <li><div>移行日時：<span id="migration-date"></span></div></li>
+                                    <li><div>移行ブロック：<span id="migration-height"></span></div></li>
+                                    <li><div>現在のブロック：<span id="current-height"></span></div></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li> 
+                            <div>L2 Testnetが稼働</div>
+                            <div>詳しくは <a href="https://lisk.com/blog/posts/new-lisk-l2-testnet-live" target="_blank" rel="noopener noreferrer">こちら</a></div>
+                        </li>
+                        <li>
+                            <div>インドネシア通信情報技術省との戦略的パートナーシップを発表</div>
+                            <div>詳しくは <a href="https://decrypt.co/219203/lisk-announces-strategic-partnership-with-the-indonesian-ministry-of-communications-and-informatics-to-support-local-web3-startups" target="_blank" rel="noopener noreferrer">こちら</a></div>
+                        </li>
+                    </ul>
                 </div>
                 <br />
                 <div class="title">更新情報</div>
                 <ul>
-                    <li><div>2024/04/12：Lisk財務報告を更新(3月度財務報告)</div></li>
+                    <li style="color: rgb(190, 42, 42);"><div>2024/04/12：Lisk財務報告を更新(3月度財務報告)</div></li>
                     <li><div>2024/03/14：Lisk財務報告を更新(2月度財務報告)</div></li>
                     <li><div>2024/02/28：リンク集にLiskポータルサイトを追加</div></li>
                     <li><div>自動更新：Lisk公式ブログ(ピックアップ記事)</div></li>
                     <li><div>自動更新：commulabブログ</div></li>
-                </ul>
-                <br />
-                <div class="title">イベント情報</div>
-                <ul>
-                    <li>
-                        <div>開催中のイベントはありません。</div>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -288,9 +297,29 @@
                 document.querySelector("#info-rank").innerHTML = `<i class="far fa-face-dizzy"></i>&nbsp;取得できませんでした。`;
             }
         }
+        
+        const setMigrationInfo = async() => {
+            try{
+                const migrationHeight = 24823618;
+                const currentHeight = await getCurrentHeight();
+                const unixTime = new Date().getTime();
+                const dt = new Date(unixTime + ((migrationHeight - currentHeight) * 10000));
+                const migrationDate = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes()).toLocaleString("ja-JP");
+                document.querySelector("#migration-height").innerHTML = migrationHeight;
+                document.querySelector("#current-height").innerHTML = currentHeight;
+                document.querySelector("#migration-date").innerHTML = `${migrationDate}頃`;
+            } catch (err) {
+                document.querySelector("#current-height").innerHTML = `<i class="far fa-face-dizzy"></i>&nbsp;取得できませんでした。`;
+                document.querySelector("#migration-date").innerHTML = "";
+            }
+        }
 
         (() => {
             setValidatorInfo();
+            setMigrationInfo();
+            setInterval(function(){
+                setMigrationInfo();
+            }, 30000);
         })();
     </script>
 </div>
