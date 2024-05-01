@@ -117,7 +117,7 @@
             for (let i = 0; i < json.fetch.length; i++) {
                 const fetch = json.fetch[i];
                 const fetchrow = `
-                <div class="title" style="${i > 0? 'margin-top: 20px;': ''}">${fetch.url.replace("https://", "").replace("?limit=1", "")}</div>
+                <div class="title" style="${i > 0? 'margin-top: 20px;': ''}">${fetch.url.replace("https://", "").replace("/api/v3/blocks?limit=1", "")}</div>
                 <div style="position:relative;height:250px;"><canvas id="fetch-chart${i}"></canvas></div>
                 `;
                 fetchdom.innerHTML += fetchrow;
