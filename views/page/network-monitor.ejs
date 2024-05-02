@@ -50,28 +50,6 @@
             </div>
         </div>
     </div>
-
-    <div style="margin-top: 30px;">
-        <div class="content-title">
-            <i class="fas fa-network-wired"></i>&nbsp;Klayr Testnet Monitor
-            <span class="open-close"><i class="far fa-square-minus"></i></span>
-        </div>
-        <div class="content-description">Klayr Testnet モニタリング(一時的)</div>
-        <div class="content-main right">
-            <div class="content open" style="width: calc(100% - 20px);">
-                <ul>
-                    <li>
-                        <div class="title">Latest Block</div>
-                        <div id="klayr-lastblock">取得中です。</div>
-                    </li>
-                    <li>
-                        <div class="title">Generator List</div>
-                        <div id="klayr-generators">取得中です。</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
     
     <link rel="stylesheet" href="../css/network-monitor.css" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -253,74 +231,10 @@
             const dt = new Date(d);
             return `${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}`;
         }
-
-        const getGeneratorList = async() => {
-            const ret = await fetch(
-                "http://localhost:7887/rpc",
-                {
-                    "method": "POST",
-                    "headers": {
-                        "Content-Type": "application/json"
-                    },
-                    "body": JSON.stringify({
-                        "jsonrpc": "2.0",
-                        "id": "1",
-                        "method": "chain_getGeneratorList",
-                        "params": {}
-                    })
-                }
-            );
-            if (ret.status !== 200) return;
-            const json = await ret.json();
-            const data = await json.result;
-            document.querySelector("#klayr-generators").innerHTML = "<ul></ul>";
-            const fetchdom = document.querySelector("#klayr-generators ul");
-            fetchdom.innerHTML = "";
-            for await(const info of data.list) {
-                const row = `
-                <li>
-                <div class="title">${info.address}</div>
-                <div>next: ${changeTimestamp(info.nextAllocatedTime)}</div>
-                </li>
-                `;
-                fetchdom.innerHTML += row;
-            }
-        }
-
-        const getLastBlock = async() => {
-            const ret = await fetch(
-                "http://localhost:7887/rpc",
-                {
-                    "method": "POST",
-                    "headers": {
-                        "Content-Type": "application/json"
-                    },
-                    "body": JSON.stringify({
-                        "jsonrpc": "2.0",
-                        "id": "1",
-                        "method": "chain_getLastBlock",
-                        "params": {}
-                    })
-                }
-            );
-            if (ret.status !== 200) return;
-            const json = await ret.json();
-            const data = await json.result;
-            document.querySelector("#klayr-lastblock").innerHTML = "<ul>";
-            document.querySelector("#klayr-lastblock").innerHTML = `<li class="title">`;
-            document.querySelector("#klayr-lastblock").innerHTML += `<div>${data.header.height}</div>`;
-            document.querySelector("#klayr-lastblock").innerHTML += `<div>id: ${data.header.id}</div>`;
-            document.querySelector("#klayr-lastblock").innerHTML += `<div>timestamp: ${changeTimestamp(data.header.timestamp)}</div>`;
-            document.querySelector("#klayr-lastblock").innerHTML += `<div>generatorAddress: ${data.header.generatorAddress}</div>`;
-            document.querySelector("#klayr-lastblock").innerHTML = "</li>";
-            document.querySelector("#klayr-lastblock").innerHTML = `</ul>`;
-        }
     
-        (async() => {
+        (() => {
             getStatus();
             getHistory();
-            await getLastBlock();
-            await getGeneratorList();
         })();
     </script>
 </div>
