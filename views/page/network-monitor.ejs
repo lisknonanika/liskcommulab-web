@@ -56,8 +56,10 @@
     <script src="../js/common.js" charset="utf-8"></script>
     <script>
         const getPingHistoryTitle = (host) => {
-            if (host.indexOf("sepolia") >= 0) {
+            if (host.indexOf("rpc.sepolia-api") >= 0) {
                 return `Testnet API (rpc.sepolia-api.lisk.com)`
+            } else if (host.indexOf("rpc.api") >= 0) {
+                return `Mainnet API (rpc.api.lisk.com)`
             } else if (host.indexOf("mainnet-service") >= 0) {
                 return `Mainnet API (mainnet-service.lisk.com)`
             } else {
@@ -65,8 +67,10 @@
             }
         }
         const getFetchHistoryTitle = (url) => {
-            if (url.indexOf("sepolia") >= 0) {
+            if (url.indexOf("rpc.sepolia-api") >= 0) {
                 return `Testnet API (rpc.sepolia-api.lisk.com)`
+            } else if (url.indexOf("rpc.api") >= 0) {
+                return `Mainnet API (rpc.api.lisk.com)`
             } else {
                 return `Mainnet API (mainnet-service.lisk.com)`
             }
