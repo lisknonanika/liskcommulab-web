@@ -175,7 +175,7 @@ header nav ul li a:active {
     padding: 10px;
     border-radius: 12px;
     width: 500px;
-    min-height: 250px;
+    min-height: 300px;
     word-wrap: break-word;
     word-break: break-all;
 }
