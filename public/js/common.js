@@ -1,31 +1,11 @@
 const SERVICE_URL = "service.lisk.com";
-const SERVICE_URL2 = "mainnet-service.liskscan.com";
 const VALIDATOR_ADDRESS = "lsk5tyhc6tw76ybwwzt9vcefy3gryjvprkcj329tw";
-const DAILY_GENERATE_BLOCK = 24 * 60 * 60 / 10 / 103;
-
-const getCurrentHeight = async() => {
-    const ret = await fetch(`https://${SERVICE_URL}/api/v3/blocks?limit=1`);
-    const json = await ret.json();
-    return json.data[0].height;
-}
-
-const getMyAccount = async () => {
-    const response = await fetch(`https://${SERVICE_URL}/api/v3/pos/validators?address=${VALIDATOR_ADDRESS}&limit=1`);
-    const json = await response.json();
-    return json.data[0];
-}
 
 const getMyReward = async() => {
     const ret = await fetch(`https://${SERVICE_URL}/api/v3/blocks?generatorAddress=${VALIDATOR_ADDRESS}&limit=1`);
     const json = await ret.json();
     const data = json.data[0];
     blockReward = +data.reward / 100000000;
-}
-
-const getValidators = async() => {
-    const ret = await fetch(`https://${SERVICE_URL}/api/v3/pos/validators?status=active&sort=rank:asc&limit=101`);
-    const json = await ret.json();
-    return json.data;
 }
 
 const getYMD = (days) => {

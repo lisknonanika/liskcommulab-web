@@ -23,29 +23,11 @@ app.get("/", async (req, res, next) => {
     });
 });
 
-app.get("/staking", (req, res, next) => {
-    res.render("template/index.ejs",
-    {
-        data: {
-            type: "staking"
-        }
-    });
-});
-
 app.get("/network-monitor", (req, res, next) => {
     res.render("template/index.ejs",
     {
         data: {
             type: "network-monitor"
-        }
-    });
-});
-
-app.get("/reward-checker", (req, res, next) => {
-    res.render("template/index.ejs",
-    {
-        data: {
-            type: "reward-checker"
         }
     });
 });

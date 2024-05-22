@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Commulab - Lisk Validator" />
+    <meta name="description" content="Commulab - Lisk Community" />
     <link rel="icon" href="./icon/favicon.ico" />
     <link rel="apple-touch-icon" href="./icon/logo192.png" />
     <link rel="manifest" href="./icon/manifest.json" />
@@ -21,12 +21,8 @@
         <div id="layer" style="display: none;"></div>
         <% if (data.type === "home") { %>
             <%- include('../page/home', { data: { blog: data.blog }}); %>
-        <% } else if (data.type === "staking") { %>
-            <%- include('../page/staking'); %>
         <% } else if (data.type === "network-monitor") { %>
             <%- include('../page/network-monitor'); %>
-        <% } else if (data.type === "reward-checker") { %>
-            <%- include('../page/reward-checker'); %>
         <% } else if (data.type === "csv-download") { %>
             <%- include('../page/csv-download'); %>
         <% } %>
