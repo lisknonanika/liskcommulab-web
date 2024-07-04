@@ -8,30 +8,7 @@
             <a href="/" id="menu-home">HOME</a>
         </li>
         <li>
-            <a id="menu-tool"><span id="menu-tool-toggle"><i class="fas fa-chevron-down"></i></span>&nbsp;TOOL</a>
-            <ul id="menu-tool-sub" style="display: none;">
-                <li><a href="/network-monitor">NETWORK MONITOR</a></li>
-                <li><a href="/csv-download">CSV DOWNLOAD</a></li>
-            </ul>
+            <a href="/network-monitor">MONITOR</a>
         </li>
     </ul>
 </nav>
-
-<script>
-    document.querySelector("#menu-tool").addEventListener("click", function(event) {
-        if (document.querySelector("#menu-tool-sub").style.display === "none") {
-            document.querySelector("#menu-tool-sub").style.left = `${Math.floor(document.querySelector("#menu-tool").getBoundingClientRect().right - 210)}px`;
-            document.querySelector("#menu-tool-sub").style.display = "block";
-            document.querySelector("#menu-tool-toggle").innerHTML = "<i class='fas fa-chevron-up'></i>";
-            return;
-        }
-        document.querySelector("#menu-tool-sub").style.display = "none";
-        document.querySelector("#menu-tool-toggle").innerHTML = "<i class='fas fa-chevron-down'></i>";
-    }, false);
-    
-    document.querySelector("body").addEventListener("click", function(event) {
-        if (event.target.id === "menu-tool") return;
-        document.querySelector("#menu-tool-sub").style.display = "none";
-        document.querySelector("#menu-tool-toggle").innerHTML = "<i class='fas fa-chevron-down'></i>";
-    }, false);
-</script>

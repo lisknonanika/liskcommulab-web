@@ -23,8 +23,6 @@
             <%- include('../page/home', { data: { blog: data.blog }}); %>
         <% } else if (data.type === "network-monitor") { %>
             <%- include('../page/network-monitor'); %>
-        <% } else if (data.type === "csv-download") { %>
-            <%- include('../page/csv-download'); %>
         <% } %>
     </div>
 </body>

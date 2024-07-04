@@ -231,20 +231,6 @@
             });
         }
     
-        const reload = async () => {
-            const pingStatusDom = document.querySelector("#status-ping");
-            pingStatusDom.innerHTML = "Loading...";
-            const fetchStatusDom = document.querySelector("#status-fetch");
-            fetchStatusDom.innerHTML = "Loading...";
-            getStatus();
-    
-            const pingHistoryDom = document.querySelector("#history-ping");
-            pingHistoryDom.innerHTML = "Loading...";
-            const fetchHistoryDom = document.querySelector("#history-fetch");
-            fetchHistoryDom.innerHTML = "Loading...";
-            getHistory();
-        }
-    
         const changeTimestamp = (d) => {
             const dt = new Date(d);
             return `${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}`;
