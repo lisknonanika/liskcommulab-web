@@ -26,29 +26,10 @@ li div {
 }
 
 /* status-host */
-.status-host {
+.status {
     margin-top: 20px;
 }
 
-.status-host .content-main {
+.status .content-main {
     background-image: url("../image/lisk-Search.png");
-}
-
-/* status-api */
-.status-api {
-    margin-top: 30px;
-}
-
-.status-api .content-main {
-    background-image: url("../image/lisk-Stars.png");
-}
-
-/* history-host */
-.history-host {
-    margin-top: 30px;
-}
-
-/* history-api */
-.history-api {
-    margin-top: 30px;
 }
