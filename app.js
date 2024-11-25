@@ -18,7 +18,7 @@ app.get("/", async (req, res, next) => {
     {
         data: {
             type: "home",
-            blog: [await getCommulabBlog(), await getLiskBlog()]
+            blog: [await getCommulabBlog()]
         }
     });
 });
@@ -63,35 +63,6 @@ const getCommulabBlog = async() => {
             if (node.nodeName === "pubDate") blog.date = new Date(node.textContent).toLocaleString("ja-JP");
             if (node.nodeName === "link") blog.link = node.textContent;
         }
-    } catch (err) {
-        blog.error = true;
-    }
-    return blog;
-}
-
-const getLiskBlog = async() => {
-    const blog = {
-        error: false,
-        title: "",
-        img: "",
-        description: "",
-        writer: "Lisk",
-        date: "",
-        link: ""
-    }
-
-    try {
-        const response = await fetch("https://lisk.com/blog", { mode: "cors" });
-        const html = await response.text();
-        const jsdom = new JSDOM();
-        const parser = new jsdom.window.DOMParser();
-        let dom = parser.parseFromString(html, "application/xhtml+xml");
-        dom = dom.querySelectorAll(".o-container")[2].dom.querySelectorAll("a")[0];
-        blog.link = dom.href;
-        blog.img = dom.querySelector("img").src;
-        blog.title = dom.querySelector("h3").innerText;
-        blog.description = dom.querySelector("p").innerText;
-        blog.date = dom.querySelector("li").innerText;
     } catch (err) {
         blog.error = true;
     }
