@@ -86,24 +86,12 @@ const getLiskBlog = async() => {
         const jsdom = new JSDOM();
         const parser = new jsdom.window.DOMParser();
         let dom = parser.parseFromString(html, "application/xhtml+xml");
-        dom = dom.querySelectorAll(".styles_base-grid__hHO_O")[3];
-        
-        const text = dom.querySelectorAll(".styles_RichText__LLXg6");
-        blog.title = text[0].textContent;
-        blog.description = text[1].textContent;
-        blog.date = dom.querySelector(".styles_PostDetails__k5rEX").querySelector("span").textContent;
-        for await (let attr of dom.querySelectorAll("img")[1].attributes) {
-            if (attr.name === "src") {
-                blog.img = attr.value;
-                break;
-            }
-        }
-        for await (let attr of dom.querySelector("a").attributes) {
-            if (attr.name === "href") {
-                blog.link = `https://lisk.com${attr.value}`;
-                break;
-            }
-        }
+        dom = dom.querySelectorAll(".o-container")[2].dom.querySelectorAll("a")[0];
+        blog.link = dom.href;
+        blog.img = dom.querySelector("img").src;
+        blog.title = dom.querySelector("h3").innerText;
+        blog.description = dom.querySelector("p").innerText;
+        blog.date = dom.querySelector("li").innerText;
     } catch (err) {
         blog.error = true;
     }

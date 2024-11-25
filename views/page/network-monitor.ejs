@@ -41,13 +41,17 @@
                 let response = null;
                 if (url.indexOf("rpc") >= 0) {
                     response = await fetch(url, {
+                        mode: "cors",
                         method: "POST",
                         headers: {"Content-Type": "application/json"},
                         body: JSON.stringify({"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 0}),
                         signal: controller.signal
                     });
                 } else {
-                    response = await fetch(url, { signal: controller.signal });
+                    response = await fetch(url, {
+                        mode: "cors",
+                        signal: controller.signal
+                    });
                 }
                 result.status = response.status.toString();
                 result.alive = response.status.toString() === "200";

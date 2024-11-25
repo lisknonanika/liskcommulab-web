@@ -45,16 +45,16 @@
                 <div>
                     <ul>
                         <li style="color: rgb(190, 42, 42);">
-                            <div>ステーキングサービスが開始されました</div>
-                            <div>詳しくは <a href="https://lisk.com/blog/posts/lsk-staking-explained" target="_blank" rel="noopener noreferrer">こちら</a></div>
+                            <div>エアドロップが開始されました</div>
+                            <div>詳しくは <a href="https://lisk.com/blog/posts/lisk-lsk-airdrop/" target="_blank" rel="noopener noreferrer">こちら</a></div>
                         </li>
                         <li style="color: rgb(190, 42, 42);">
-                            <div>HodlerDrop(エアドロップ)ページが公開されました</div>
-                            <div>詳しくは <a href="https://hodlerdrop.lisk.com/hodlerdrop/" target="_blank" rel="noopener noreferrer">こちら</a></div>
-                        </li>
-                        <li style="color: rgb(190, 42, 42);">
-                            <div>L2 LSK請求方法が公開されました</div>
-                            <div>詳しくは <a href="https://lisk.com/blog/posts/everything-you-need-to-know-for-the-lsk-migration-to-lisk-l2" target="_blank" rel="noopener noreferrer">こちら</a></div>
+                            <div>その他</div>
+                            <ul>
+                                <li><a href="https://lisk.com/blog/posts/lsk-staking-explained" target="_blank" rel="noopener noreferrer">ステーキング方法</a></li>
+                                <li> <a href="https://hodlerdrop.lisk.com/hodlerdrop/" target="_blank" rel="noopener noreferrer">HodlerDrop(エアドロップ)</a></li>
+                                <li><a href="https://lisk.com/blog/posts/everything-you-need-to-know-for-the-lsk-migration-to-lisk-l2" target="_blank" rel="noopener noreferrer">L2 LSK請求方法</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -170,5 +170,36 @@
 
     <link rel="stylesheet" href="../css/home.css" type="text/css" />
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <script src="https://js.lisk.com/lisk-client-5.2.1.js" charset="utf-8"></script>
+    <script>
+        const getLiskBlog = async() => {
+            const blog = {
+                error: false,
+                title: "",
+                img: "",
+                description: "",
+                writer: "Lisk",
+                date: "",
+                link: ""
+            }
+
+            try {
+                const response = await fetch("https://lisk.com/blog", { mode: "no-cors" });
+                const html = await response.text();
+                const jsdom = new JSDOM();
+                const parser = new jsdom.window.DOMParser();
+                let dom = parser.parseFromString(html, "application/xhtml+xml");
+                dom = dom.querySelectorAll(".o-container")[2].dom.querySelectorAll("a")[0];
+                blog.link = dom.href;
+                blog.img = dom.querySelector("img").src;
+                blog.title = dom.querySelector("h3").innerText;
+                blog.description = dom.querySelector("p").innerText;
+                blog.date = dom.querySelector("li").innerText;
+                console.log(blog)
+            } catch (err) {
+                blog.error = true;
+            }
+            return blog;
+        }
+        getLiskBlog();
+    </script>
 </div>
