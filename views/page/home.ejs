@@ -183,7 +183,7 @@
             }
 
             try {
-                const response = await fetch("https://lisk.com/blog", { mode: "no-cors" });
+                const response = await fetch("https://lisk.com/blog", { mode: "cors" });
                 const html = await response.text();
                 const jsdom = new JSDOM();
                 const parser = new jsdom.window.DOMParser();
