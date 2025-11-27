@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <div class="information">
+    <!-- <div class="information">
         <div class="content-title">
             <img src="../image/commulab-Logo.png"/>&nbsp;Information
             <span class="open-close"><i class="far fa-square-minus"></i></span>
@@ -70,7 +70,7 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="blog">
         <div class="content-title">
@@ -78,7 +78,7 @@
             <span class="open-close"><i class="far fa-square-minus"></i></span>
         </div>
         <div class="content-description">commulabブログ(Noteのマガジン)の最新記事</div>
-        <div class="content-main left">
+        <div class="content-main right">
             <div class="content open">
                 <% if (data.blog[0].error) { %>
                     <div><i class="far fa-face-dizzy"></i>&nbsp;ブログが取得できませんでした。</div>
@@ -93,7 +93,7 @@
         </div>
     </div>
 
-    <div class="announce">
+    <!-- <div class="announce">
         <div class="content-title">
             <span class="icon-Lisk-Symbol"></span>&nbsp;Financial Update
             <span class="open-close"><i class="far fa-square-minus"></i></span>
@@ -137,8 +137,96 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
+    <div id="network-monitor">
+        <div class="status">
+            <div class="content-title">
+                <i class="fas fa-network-wired"></i>&nbsp;API Status
+                <span class="open-close"><i class="far fa-square-minus"></i></span>
+            </div>
+            <div class="content-description">タイムアウト：5秒</div>
+            <div class="content-main left">
+                <div class="content open">
+                    <div id="status"></div>
+                </div>
+            </div>
+        </div>
+        
+        <script src="../js/common.js" charset="utf-8"></script>
+        <script>
+            const changeTimestamp = (d) => {
+                const dt = new Date(d);
+                return `${dt.toLocaleDateString()} ${dt.toLocaleTimeString()}`;
+            }
+
+            const MONITORS = [
+                { URL: "https://rpc.api.lisk.com", TITLE: "[Mainnet] RPC API (rpc.api.lisk.com)" },
+                { URL: "https://blockscout.lisk.com/api/v2/stats", TITLE: "[Mainnet] Blockscout API (blockscout.lisk.com)" },
+                { URL: "https://rpc.sepolia-api.lisk.com", TITLE: "[Testnet] RPC API (rpc.sepolia-api.lisk.com)" },
+                { URL: "https://sepolia-blockscout.lisk.com/api/v2/stats", TITLE: "[Testnet] Blockscout API (sepolia-blockscout.lisk.com)" }
+            ];
+            
+            const monitor = async(url) => {
+                const result = {
+                    checkDate : new Date(),
+                    status : "???",
+                    alive : false,
+                    responseTime: 0
+                };
+                const controller = new AbortController();
+                const fetchTimeout = setTimeout(() => { controller.abort(); }, 5000);
+        
+                try {
+                    let response = null;
+                    if (url.indexOf("rpc") >= 0) {
+                        response = await fetch(url, {
+                            mode: "cors",
+                            method: "POST",
+                            headers: {"Content-Type": "application/json"},
+                            body: JSON.stringify({"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 0}),
+                            signal: controller.signal
+                        });
+                    } else {
+                        response = await fetch(url, {
+                            mode: "cors",
+                            signal: controller.signal
+                        });
+                    }
+                    result.status = response.status.toString();
+                    result.alive = response.status.toString() === "200";
+                    result.responseTime = new Date().getTime() - result.checkDate.getTime();
+                } finally {
+                    clearTimeout(fetchTimeout);
+                }
+                return result;
+            }
+            
+            const getStatus = async() => {
+                document.querySelector("#status").innerHTML = "<ul></ul>";
+                const dom = document.querySelector("#status ul");
+                dom.innerHTML = "取得中です。";
+                let row = ""
+                for (let mon of MONITORS) {
+                    const ret = await monitor(mon.URL);
+                    row += `
+                    <li class="${ret.alive? 'status-green': 'status-red'}">
+                    <div class="title">${mon.TITLE}</div>
+                    <div>status: ${ret.status}</div>
+                    <div>check: ${changeTimestamp(ret.checkDate)}</div>
+                    <div>response: ${ret.responseTime} ミリ秒</div>
+                    </li>
+                    `;
+                }
+                dom.innerHTML = row;
+            };
+        
+            (() => {
+                getStatus();
+            })();
+        </script>
+    </div>
+    
     <div class="link">
         <div class="content-title">
             <i class="fas fa-link"></i>&nbsp;Link

@@ -21,8 +21,6 @@
         <div id="layer" style="display: none;"></div>
         <% if (data.type === "home") { %>
             <%- include('../page/home', { data: { blog: data.blog }}); %>
-        <% } else if (data.type === "network-monitor") { %>
-            <%- include('../page/network-monitor'); %>
         <% } %>
     </div>
 </body>
